@@ -1,6 +1,10 @@
 ﻿using System;
-using System.Drawing;
+using System.ComponentModel.Design;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
+using System.Transactions;
+using MapCreatorModels.Models.Assets;
 
 
 namespace MapCreatorModels.Models
@@ -11,102 +15,136 @@ namespace MapCreatorModels.Models
     /// </summary>
     public class Texture
     {
-        //NE PAS CHAGER LA VALEUR DE L'ARRAY DIRECTEMENT PASSER PAR LES METHODES
         [JsonIgnore]
-        private Color[,] _colors = new Color[16,16];
-
+        public int Height { get; set; } = 16;
+        public int Width { get; set; } = 16;
         //NE PAS CHAGER LA VALEUR DE L'ARRAY DIRECTEMENT PASSER PAR LES METHODES
-        [JsonIgnore]
-        private byte[] _byteArrayColors = new byte[128];
 
-        // Permet de convertir un tableau 2d de byte en un tableau de string ou chaque caractère représente 2 pixels
-        // sinon le json serait trop gros
+        GameColor[,] _color2DArray;
+        [JsonIgnore]
+        public GameColor[,] Color2DArray
+        {
+            get { return _color2DArray; }
+            private set { }
+        }
+
+        // Propriete pour le ColorAsSting et le FPGA plus tard
+        // Ne pas utiliser directement dans le code.
+        [JsonIgnore]
+        public byte[] ColorByteArray { get { return ColorArray2ColorByteArray(_color2DArray); } }
+
+        // Pour le Json seulement, permet de sauver de l'espace dans le fichier json
         [JsonInclude]
         public string ColorsAsAString
         {
-            get { return Convert.ToBase64String(_byteArrayColors); }
+            get { return Convert.ToBase64String(ColorByteArray); }
             set
             {
-                _byteArrayColors = Convert.FromBase64String(value);
-                _colors = ColorByteArrayToColorArray(_byteArrayColors);
+                _color2DArray = ColorByteArray2ColorArray(Convert.FromBase64String(value));
+
             }
         }
 
-        public byte[] GetColorsAsByteArray()
+        public Texture()
         {
-            return _byteArrayColors;
+            _color2DArray = new GameColor[Height, Width];
         }
 
-        public Color[,] GetColors()
+        public Texture(int height, int witdh)
         {
-            return _colors;
+            Height = height;
+            Width = witdh;
+            _color2DArray = new GameColor[Height, Width];
         }
 
-        public Color GetColor(int x, int y)
+        public Texture(Texture texture)
         {
-            return _colors[y, x];
+            texture.Width = Width;
+            texture.Height = Height;
+            _color2DArray = new GameColor[Height, Width];
+            //Copy des references dans un nouvel array
+            for (int i = 0; i < _color2DArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < _color2DArray.GetLength(1); j++)
+                {
+                    _color2DArray[i, j] = _color2DArray[i, j];
+                }
+            }
         }
-        //For testing purpose only
-        public int GetColorValue(int x, int y)
-        {
-            int index = GetByteArrayColorIndex(x, y);
-            if (x % 2 == 1)
-                return (byte)(_byteArrayColors[index] & 0x0F);
-            else
-                return (byte)((_byteArrayColors[index] & 0xF0) >> 4);
 
+        public GameColor GetColor(int x, int y)
+        {
+            return _color2DArray[y, x];
         }
-
-        public void SetColor(Color color, int x, int y)
+        
+        public byte GetColorId(int x, int y)
         {
-            _colors[y, x] = color;
-            SetByteArrayColor(color.Id, x, y);
+            return _color2DArray[y, x].Id;
         }
 
         public void SetColor(byte colorId, int x, int y)
         {
-            _colors[y, x] = Color.GetColorById(colorId);
-            SetByteArrayColor(colorId, x, y);
+            _color2DArray[y, x] = GameColorList.GetColorById(colorId);
         }
 
-        private void SetByteArrayColor(byte colorId, int x, int y)
-        {
-            int index = y * ((_colors.GetLength(0) - 1) / 2) + x / 2;
-            //regarder si x est impair ou pair
-            //Si x est impair alors on doit changer les 4 derniers bits
-            if (x % 2 == 1)
-                _byteArrayColors[index] = (byte)((_byteArrayColors[index] & 0xF0) | colorId);
-            else
-                _byteArrayColors[index] = (byte)((_byteArrayColors[index] & 0x0F) | (colorId << 4));
-        }
         /// <summary>
-        /// Obtenir la valeur de l'index du tableau de byte
+        /// 
         /// </summary>
-        /// <param name="x">X</param>
-        /// <param name="y">Y</param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         /// <returns></returns>
-        private int GetByteArrayColorIndex(int x, int y) {
-            return y * ((_colors.GetLength(0) - 1) / 2) + x / 2;
+        private int GetByteArrayColorIndex(int x, int y)
+        {
+            return (y * Height + x) / 2;
         }
 
-        private static Color[,] ColorByteArrayToColorArray(byte[] colorArray) {
-            Color[,] colors = new Color[16, 16];
-            for (int i = 0; i < colorArray.Length; i++)
+        /// <summary>
+        /// Envois les index du color array selon l'index de l'array de byte
+        /// Comme l'array de byte contient 2 pixels par byte x1 est la valeur du pixel 1 et x2 est la valeur du pixel 2
+        /// </summary>
+        /// <param name="index">Index Array 1D</param>
+        /// <param name="x1">Index X du pixel 1</param>
+        /// <param name="x2">Index X du pixel 2</param>
+        /// <param name="y">Index Y des pixel</param>
+        private void GetColorArrayIndex(int index, out int x1, out int x2, out int y)
+        {
+            int tempValue = index * 2;
+            int xtemp = tempValue % Width;
+            x1 = xtemp;
+            x2 = xtemp + 1;
+            y = (tempValue - xtemp) / Height;
+        }
+
+        private byte[] ColorArray2ColorByteArray(GameColor[,] color2DArray)
+        {
+            byte[] colorByteArray = new byte[color2DArray.Length / 2];
+            for (int y = 0; y < color2DArray.GetLength(0); y++)
             {
-                int y = i % 16;
-                int x1 = (i % 8) * 2;
-                int x2 = x1 + 1;
-                // Left byte element
-                colors[y, x1] = Color.GetColorById((byte)(colorArray[i] & 0x0F));
-                //Right byte element
-                colors[y, x2] = Color.GetColorById((byte)((colorArray[i] & 0xF0) >> 4));
+                for (int x = 0; x < color2DArray.GetLength(1); x++)
+                {
+                    int index = GetByteArrayColorIndex(x, y);
+                    if (x % 2 == 0)
+                        colorByteArray[index] = colorByteArray[index] |= (byte)(color2DArray[y, x].Id << 4);
+                    else
+                        colorByteArray[index] = colorByteArray[index] |= color2DArray[y, x].Id;
+                }
+            }
+            return colorByteArray;
+        }
+
+        private GameColor[,] ColorByteArray2ColorArray(byte[] colorByteArray)
+        {
+            GameColor[,] colors = new GameColor[Height, Width];
+            for (int i = 0; i < colorByteArray.Length; i++)
+            {
+                byte left = (byte)((colorByteArray[i] & 0xF0) >> 4);
+                byte right = (byte)(colorByteArray[i] & 0x0F);
+                GetColorArrayIndex(i, out int x1Value, out int x2Value, out int yValue);
+
+                colors[yValue, x1Value] = GameColorList.GetColorById(left);
+                colors[yValue, x2Value] = GameColorList.GetColorById(right);
             }
             return colors;
-        }
-         
-        public Texture()
-        {
-            
         }
     }
 }

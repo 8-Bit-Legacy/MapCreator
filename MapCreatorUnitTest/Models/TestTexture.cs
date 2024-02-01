@@ -1,4 +1,5 @@
 using MapCreatorModels.Models;
+using MapCreatorModels.Models.Assets;
 using System.Runtime.InteropServices.JavaScript;
 
 namespace MapCreatorUnitTest.Models
@@ -6,9 +7,8 @@ namespace MapCreatorUnitTest.Models
     [TestClass]
     public class TextureUnitTest
     {
-        Color[,] colorReference = new Color[16, 16];
+        GameColor[,] colorReference = new GameColor[16, 16];
         Texture texture = new();
-
 
         [TestInitialize]
         public void TestInitialize()
@@ -18,39 +18,28 @@ namespace MapCreatorUnitTest.Models
             {
                 for (int j = 0; j < colorReference.GetLength(1); j++)
                 {
-                    colorReference[j, i] = Color.GetColorById((byte)rnd.Next(0, 16));
-                    texture.SetColor(colorReference[j, i], i, j);
+                    colorReference[j, i] = GameColorList.GetColorById((byte)rnd.Next(0, 16));
+                    texture.SetColor(colorReference[j, i].Id, i, j);
                 }
             }
-        }
-
-        [TestMethod]
-        public void TestColorAsString()
-        {
-
-        }
-
-        [TestMethod]
-        public void TestGetColorsAsByteArray()
-        {
-
         }
 
         [TestMethod]
         public void TestGetColors()
         {
-            //Tester l'obtention de la référence de la matrice de couleur
-            for (int i = 0; i < colorReference.GetLength(0); i++)
+            string color = texture.ColorsAsAString;
+
+            Texture texture2 = new();
+            texture2.ColorsAsAString = color;
+
+            for (int y = 0; y < texture.Height; y++)
             {
-                for (int j = 0; j < colorReference.GetLength(1); j++)
+                for (int x = 0; x < texture.Width; x++)
                 {
-                   Assert.AreEqual(colorReference[j, i], texture.GetColors()[j, i]);
-                   Assert.AreEqual(colorReference[j, i], texture.GetColor(i,j)); 
-                   Assert.AreEqual(colorReference[j, i].Id, texture.GetColorValue(i,j)); 
+                    Assert.AreEqual(texture.Color2DArray[y, x], texture2.Color2DArray[y, x]);
                 }
             }
 
-            //Tester l'obtention du byte de la matrice de couleur
         }
     }
 }
