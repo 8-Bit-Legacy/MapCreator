@@ -3,9 +3,6 @@ namespace MapCreatorModels.Models.Assets
 {
     public class GameColor
     {
-        /// <summary>
-        /// Valeur entre 0 et 15 permettant de définir la couleur dans le FPGA
-        /// </summary>
         public byte Id { get; }
         private int _colorValue;
         public int ColorValue

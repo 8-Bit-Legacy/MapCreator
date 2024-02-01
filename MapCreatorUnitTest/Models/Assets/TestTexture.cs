@@ -1,8 +1,8 @@
-using MapCreatorModels.Models;
 using MapCreatorModels.Models.Assets;
 using System.Runtime.InteropServices.JavaScript;
+using System.Text.Json;
 
-namespace MapCreatorUnitTest.Models
+namespace MapCreatorUnitTest.Models.Assets
 {
     [TestClass]
     public class TextureUnitTest
@@ -40,6 +40,35 @@ namespace MapCreatorUnitTest.Models
                 }
             }
 
+        }
+
+        [TestMethod]
+        public void TestClone()
+        {
+            Texture texture2 = (Texture)texture.Clone();
+
+            for (int y = 0; y < texture.Height; y++)
+            {
+                for (int x = 0; x < texture.Width; x++)
+                {
+                    Assert.AreEqual(texture.Color2DArray[y, x], texture2.Color2DArray[y, x]);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void TestJsonSerialization()
+        {
+            string jsonString = JsonSerializer.Serialize(texture);
+            Texture texture2 = JsonSerializer.Deserialize<Texture>(jsonString);
+
+            for (int y = 0; y < texture.Height; y++)
+            {
+                for (int x = 0; x < texture.Width; x++)
+                {
+                    Assert.AreEqual(texture.Color2DArray[y, x], texture2.Color2DArray[y, x]);
+                }
+            }
         }
     }
 }

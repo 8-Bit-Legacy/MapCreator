@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using MapCreatorModels.Models;
+using MapCreatorModels.Models.Assets;
 
 namespace MapCreator.DAL
 {

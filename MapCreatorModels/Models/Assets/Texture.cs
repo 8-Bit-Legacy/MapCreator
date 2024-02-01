@@ -1,23 +1,16 @@
-﻿using System;
-using System.ComponentModel.Design;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
-using System.Transactions;
-using MapCreatorModels.Models.Assets;
 
-
-namespace MapCreatorModels.Models
+namespace MapCreatorModels.Models.Assets
 {
     /// <summary>
     /// Une texture est un tableau de 128 bytes
     /// Chaques octets représente deux pixels
     /// </summary>
-    public class Texture
+    public class Texture : ICloneable
     {
-        [JsonIgnore]
-        public int Height { get; set; } = 16;
-        public int Width { get; set; } = 16;
+        public int Height { get; init; } = 16;
+        public int Width { get; init; } = 16;
         //NE PAS CHAGER LA VALEUR DE L'ARRAY DIRECTEMENT PASSER PAR LES METHODES
 
         GameColor[,] _color2DArray;
@@ -38,16 +31,14 @@ namespace MapCreatorModels.Models
         public string ColorsAsAString
         {
             get { return Convert.ToBase64String(ColorByteArray); }
-            set
-            {
-                _color2DArray = ColorByteArray2ColorArray(Convert.FromBase64String(value));
-
-            }
+            set { _color2DArray = ColorByteArray2ColorArray(Convert.FromBase64String(value)); }
         }
-
+        [JsonConstructor]
         public Texture()
         {
             _color2DArray = new GameColor[Height, Width];
+            GameColor defaultColor = GameColorList.GetColorById(0);
+            FillWithColor(defaultColor);
         }
 
         public Texture(int height, int witdh)
@@ -55,19 +46,17 @@ namespace MapCreatorModels.Models
             Height = height;
             Width = witdh;
             _color2DArray = new GameColor[Height, Width];
+            GameColor defaultColor = GameColorList.GetColorById(0);
+            FillWithColor(defaultColor);
         }
 
-        public Texture(Texture texture)
+        public void FillWithColor(GameColor color)
         {
-            texture.Width = Width;
-            texture.Height = Height;
-            _color2DArray = new GameColor[Height, Width];
-            //Copy des references dans un nouvel array
-            for (int i = 0; i < _color2DArray.GetLength(0); i++)
+            for (int y = 0; y < Height; y++)
             {
-                for (int j = 0; j < _color2DArray.GetLength(1); j++)
+                for (int x = 0; x < Width; x++)
                 {
-                    _color2DArray[i, j] = _color2DArray[i, j];
+                    _color2DArray[y, x] = color;
                 }
             }
         }
@@ -76,7 +65,7 @@ namespace MapCreatorModels.Models
         {
             return _color2DArray[y, x];
         }
-        
+
         public byte GetColorId(int x, int y)
         {
             return _color2DArray[y, x].Id;
@@ -145,6 +134,21 @@ namespace MapCreatorModels.Models
                 colors[yValue, x2Value] = GameColorList.GetColorById(right);
             }
             return colors;
+        }
+
+        public object Clone()
+        {
+            Texture texture = new Texture(Height, Width);
+
+            //Copy des references dans un nouvel array
+            for (int y = 0; y < _color2DArray.GetLength(0); y++)
+            {
+                for (int x = 0; x < _color2DArray.GetLength(1); x++)
+                {
+                    texture._color2DArray[y, x] = _color2DArray[y, x];
+                }
+            }
+            return texture;
         }
     }
 }
