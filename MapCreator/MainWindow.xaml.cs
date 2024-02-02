@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using MapCreatorModels.Models.Assets;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,7 @@ namespace MapCreator
         public MainWindow()
         {
             InitializeComponent();
+            TextureDrawing.BoundTexture = new Texture();
         }
     }
 }
