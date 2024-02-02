@@ -35,7 +35,7 @@ namespace MapCreator.Controls
             {
                 SetValue(BoundTextureProperty, value);
                 InitWritableBitmap(value);
-                //FillWritableBitMapWithTexture(value);
+                FillWritableBitMapWithTexture(value);
             }
         }
 
@@ -65,71 +65,44 @@ namespace MapCreator.Controls
 
         WriteableBitmap WriteableBitmap { get; set; }
 
-
         public TextureDrawing()
         {
             InitializeComponent();
             RenderOptions.SetBitmapScalingMode(DisplayedImage, BitmapScalingMode.NearestNeighbor);
-            WriteableBitmap = new WriteableBitmap(
-                16,
-                16,
-                1,
-                1,
-                PixelFormats.Pbgra32,
-            null);
-            DisplayedImage.Source = WriteableBitmap;
-            DisplayedImage.UpdateLayout();
         }
 
         private void InitWritableBitmap(Texture texture)
         {
-
             if (texture == null)
                 return;
 
-
+            WriteableBitmap = new WriteableBitmap(
+                texture.Width,
+                texture.Height,
+                1,
+                1,
+                PixelFormats.Pbgra32,
+                null);
+            DisplayedImage.Source = WriteableBitmap;
         }
 
         private void FillWritableBitMapWithTexture(Texture texture)
         {
-            byte[] ColorData = { 255, 255, 255, 255 }; // B G R
             try
             {
-                //WriteableBitmap.Lock();
+                WriteableBitmap.Lock();
                 for (int y = 0; y < texture.Height; y++)
                 {
                     for (int x = 0; x < texture.Width; x++)
                     {
-                        Int32Rect rect = new Int32Rect(
-                    x,
-                    y,
-                    1,
-                    1);
-                        WriteableBitmap.WritePixels(rect, ColorData, 4, 0);
-                        //unsafe
-                        //{
-                        //    // Get a pointer to the back buffer.
-                        //    IntPtr pBackBuffer = WriteableBitmap.BackBuffer;
-
-                        //    // Find the address of the pixel to draw.
-                        //    pBackBuffer += y * WriteableBitmap.BackBufferStride;
-                        //    pBackBuffer += x * 4;
-
-                        //    // Compute the pixel's color.
-                        //    int color_data = 255 << 16; // R
-                        //    color_data |= 128 << 8;   // G
-                        //    color_data |= 255 << 0;   // B
-
-                        //    // Assign the color data to the pixel.
-                        //    *(int*)pBackBuffer = color_data;
-                        //}
+                        SetPixel(texture.GetColor(x, y), x, y);
                     }
                 }
-                //WriteableBitmap.AddDirtyRect(new Int32Rect(1, 1, 1, 1));
+                WriteableBitmap.AddDirtyRect(new Int32Rect(0, 0, BoundTexture.Width, BoundTexture.Height));
             }
             finally
             {
-                //WriteableBitmap.Unlock();
+                WriteableBitmap.Unlock();
             }
         }
 
@@ -137,35 +110,19 @@ namespace MapCreator.Controls
         // unsafe code to write a pixel into the back buffer.
         void DrawPixel(MouseEventArgs e)
         {
-            if (BoundTexture == null)
+            if (BoundTexture == null | !IsDrawable)
                 return;
 
-            int column = (int)e.GetPosition(DisplayedImage).X / ((int)this.ActualHeight / BoundTexture.Width);
-            int row = (int)e.GetPosition(DisplayedImage).Y / ((int)this.Width / BoundTexture.Height);
+            int mouseX = (int)e.GetPosition(DisplayedImage).X;
+            int mouseY = (int)e.GetPosition(DisplayedImage).Y;
+            int column = (int)((mouseX - 1) / (DisplayedImage.ActualWidth / BoundTexture.Width));
+            int row = (int)((mouseY - 1) / (DisplayedImage.ActualHeight / BoundTexture.Height));
 
             try
             {
                 // Reserve the back buffer for updates.
                 WriteableBitmap.Lock();
-
-                unsafe
-                {
-                    // Get a pointer to the back buffer.
-                    IntPtr pBackBuffer = WriteableBitmap.BackBuffer;
-
-                    // Find the address of the pixel to draw.
-                    pBackBuffer += row * WriteableBitmap.BackBufferStride;
-                    pBackBuffer += column * 4;
-
-                    // Compute the pixel's color.
-                    int color_data = 255 << 16; // R
-                    color_data |= 128 << 8;   // G
-                    color_data |= 255 << 0;   // B
-
-                    // Assign the color data to the pixel.
-                    *((int*)pBackBuffer) = color_data;
-                }
-
+                SetPixel(SelectedColor, column, row);
                 // Specify the area of the bitmap that changed.
                 WriteableBitmap.AddDirtyRect(new Int32Rect(column, row, 1, 1));
             }
@@ -174,6 +131,33 @@ namespace MapCreator.Controls
                 // Release the back buffer and make it available for display.
                 WriteableBitmap.Unlock();
             }
+        }
+        /// <summary>
+        /// Toujours lock et unlock le WritableBitMap avant de faire ceci
+        /// </summary>
+        /// <param name="gameColor"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        private void SetPixel(GameColor gameColor, int x, int y)
+        {
+            unsafe
+            {
+                // Get a pointer to the back buffer.
+                IntPtr pBackBuffer = WriteableBitmap.BackBuffer;
+
+                // Find the address of the pixel to draw.
+                pBackBuffer += y * WriteableBitmap.BackBufferStride;
+                pBackBuffer += x * 4;
+
+                // Compute the pixel's color.
+                int color_data = gameColor.Red << 16; // R
+                color_data |= gameColor.Green << 8;   // G
+                color_data |= gameColor.Blue << 0;   // B
+
+                // Assign the color data to the pixel.
+                *(int*)pBackBuffer = color_data;
+            }
+            BoundTexture.SetColor(gameColor.Id, x, y);
         }
 
         private void DisplayedImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
