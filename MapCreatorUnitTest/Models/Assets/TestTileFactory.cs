@@ -5,7 +5,6 @@ namespace MapCreatorUnitTest.Models.Assets
     [TestClass]
     public class TestTileFactory
     {
-
         TileFactory tileFactory = new TileFactory();
 
         [TestInitialize]

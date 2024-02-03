@@ -31,13 +31,20 @@ namespace MapCreator.Controls
             set { SetValue(SelectedColorProperty, value); }
         }
 
-        private List<GameColor> GameColors = new List<GameColor>();
+        public static readonly DependencyProperty ColorListProperty =
+     DependencyProperty.Register("ColorList",
+     typeof(List<GameColor>), typeof(ColorSelectionList));
+
+        public List<GameColor> ColorList
+        {
+            get { return (List<GameColor>)GetValue(ColorListProperty); }
+            set { SetValue(ColorListProperty, value); }
+        }
 
         public ColorSelectionList()
         {
             InitializeComponent();
-            GameColors = new List<GameColor>(GameColorList.GetColors());
-            GameColorListBox.ItemsSource = GameColors;
+            ColorList = new List<GameColor>(GameColorList.GetColors());
         }
     }
 }

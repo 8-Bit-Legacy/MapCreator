@@ -49,7 +49,6 @@ namespace MapCreatorModels.Models.Assets
             this.Id = Id;
             Bitmap = new Bitmap(1, 1);
             Bitmap.SetPixel(0, 0, System.Drawing.Color.FromArgb(255, Red, Green, Blue));
-
         }
     }
 }

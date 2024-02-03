@@ -1,0 +1,62 @@
+﻿<Window x:Class="MapCreator.Windows.TextureDrawerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MapCreator.Windows"
+        xmlns:controls ="clr-namespace:MapCreator.Controls"
+        xmlns:converter ="clr-namespace:MapCreator.Converter"
+        mc:Ignorable="d"
+        Title="TextureDrawerWindow" Height="800" Width="1500"
+        Background="Gray"
+        x:Name="ThisWindow">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox FontSize="100" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding DuplicateDisplay}"/>
+                <TextBlock FontSize="20" Grid.Column="1">Duplicate Displays</TextBlock>
+            </StackPanel>
+        </StackPanel>
+        <Viewbox Grid.Column="1" Stretch="Uniform">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="1" Grid.Column="1" x:Name="TopLeftTexture"      BoundTexture="{Binding TopLeft, Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="1" Grid.Column="2" x:Name="TopCenterTexture"    BoundTexture="{Binding Path=TopCenter, Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="1" Grid.Column="3" x:Name="TopRightTexture"     BoundTexture="{Binding TopRight, Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="2" Grid.Column="1" x:Name="CenterLeftTexture"   BoundTexture="{Binding CenterLeft, Mode=TwoWay}"/>
+                <Border BorderThickness="3" BorderBrush="Black" Grid.Row="2" Grid.Column="2">
+                    <controls:TextureDrawing IsDrawable="True"   x:Name="CenterTexture"       BoundTexture="{Binding Path=Center, Mode=TwoWay}" SelectedColor="{Binding SelectedGameColor, Mode=TwoWay}"/>
+                </Border>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="2" Grid.Column="3" x:Name="RightTexture"        BoundTexture="{Binding CenterRight , Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="3" Grid.Column="1" x:Name="BottomLeftTexture"   BoundTexture="{Binding BottomLeft, Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="3" Grid.Column="2" x:Name="BottomCenterTexture" BoundTexture="{Binding BottomCenter, Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="3" Grid.Column="3" x:Name="BottomRightTexture"  BoundTexture="{Binding BottomRight, Mode=TwoWay}"/>
+            </Grid>
+        </Viewbox>
+
+        <GridSplitter Grid.Column="2"
+                  Width="2" Background="Black" 
+                  VerticalAlignment="Stretch" 
+                  HorizontalAlignment="Center" />
+        <controls:ColorSelectionList Grid.Column="3" x:Name="ColorSelect" HorizontalAlignment="Stretch" SelectedColor="{Binding SelectedGameColor, Mode=TwoWay}"></controls:ColorSelectionList>
+    </Grid>
+</Window>
