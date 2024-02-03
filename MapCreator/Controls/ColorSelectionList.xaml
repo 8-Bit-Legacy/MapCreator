@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="MapCreator.Controls.ColorSelectionList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MapCreator.Controls"
+             xmlns:converter ="clr-namespace:MapCreator.Converter"
+             mc:Ignorable="d"
+             Background="LightGray">
+    <ListBox x:Name="GameColorListBox" ItemsSource="{Binding GameColors}" SelectedItem="{Binding SelectedColor}">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="80" Height="80" Source="{Binding Bitmap, Converter={StaticResource BitmapConverter}}"/>
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" FontSize="40">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="0x{0} ({1})">
+                                <Binding Path="Name"/>
+                                <Binding Path="Id"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+
+
+                </Grid>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</UserControl>

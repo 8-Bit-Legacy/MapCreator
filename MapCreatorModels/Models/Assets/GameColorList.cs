@@ -8,7 +8,6 @@ namespace MapCreatorModels.Models.Assets
 {
     public class GameColorList
     {
-        //TODO : Change the colors. IMPORTANT, THE COLOR ID MUST ALWAY BE IT'S INDEX IN THE ARRAY
         private static readonly GameColor[] _Colors = [
             new GameColor(0x000000, 0),
             new GameColor(0x0000AA, 1),
