@@ -2,6 +2,7 @@
 using MapCreatorModels.DAL;
 using System.Windows;
 using MapCreator.Windows;
+using System.Windows.Media;
 
 namespace MapCreator
 {
@@ -22,7 +23,7 @@ namespace MapCreator
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Tile tile = AppSingleton.Instance.TileFactory.CreateTile("Hi");
+            Tile tile = AppSingleton.Instance.TileFactory.CreateAsset("Hi");
             TextureDrawerWindow textureDrawerWindow = new(tile.Texture);
             textureDrawerWindow.Show();
         }

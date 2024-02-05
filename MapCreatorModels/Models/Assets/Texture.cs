@@ -7,9 +7,11 @@ namespace MapCreatorModels.Models.Assets
     /// Une texture est un tableau de 128 bytes
     /// Chaques octets représente deux pixels
     /// </summary>
-    public class Texture : ICloneable
+    public class Texture
     {
+        [JsonInclude]
         public int Height { get; init; } = 16;
+        [JsonInclude]
         public int Width { get; init; } = 16;
 
         GameColor[,] _color2DArray;
@@ -139,6 +141,21 @@ namespace MapCreatorModels.Models.Assets
                 colors[yValue, x2Value] = GameColorList.GetColorById(right);
             }
             return colors;
+        }
+
+        /// <summary>
+        /// Copies Gamecolor array into the current texture
+        /// </summary>
+        /// <param name="texture"></param>
+        public void UpdateTexture(Texture texture)
+        {
+            for (int y = 0; y < _color2DArray.GetLength(0); y++)
+            {
+                for (int x = 0; x < _color2DArray.GetLength(1); x++)
+                {
+                    this._color2DArray[y, x] = texture._color2DArray[y, x];
+                }
+            }
         }
 
         public object Clone()

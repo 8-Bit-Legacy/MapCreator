@@ -1,12 +1,9 @@
-﻿using MapCreator.Cache;
-using MapCreatorModels.Models.Assets;
-using System.Data.Common;
+﻿using MapCreatorModels.Models.Assets;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.TextFormatting;
 
 namespace MapCreator.Controls
 {

@@ -22,11 +22,11 @@ namespace MapCreatorModels.Models
         public int Width { get; init; }
 
         [JsonInclude]
-        public static Tile[,] Tiles { get; private set; } = new Tile[64, 64];
+        public static MapTile[,] MapTiles { get; private set; } = new MapTile[64, 64];
 
-        public static void SetTile(int x, int y, Tile tile)
+        public static void SetTile(int x, int y, MapTile tile)
         {
-            Tiles[y, x] = tile;
+            MapTiles[y, x] = tile;
         }
 
         [JsonConstructor]

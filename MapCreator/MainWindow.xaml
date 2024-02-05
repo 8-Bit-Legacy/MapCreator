@@ -4,13 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MapCreator"
+        xmlns:assets="clr-namespace:MapCreatorModels.Models.Assets;assembly=MapCreatorModels"
         xmlns:controls ="clr-namespace:MapCreator.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
@@ -19,6 +20,11 @@
               Width="2" Background="Black" 
               VerticalAlignment="Stretch" 
               HorizontalAlignment="Center"/>
-        <controls:TileSelectionList Grid.Column="2" HorizontalAlignment="Stretch" SelectedTile="{Binding SelectedTile, Mode=TwoWay}" TileList="{Binding TileList}"/>
+        <controls:AssetSelectionList Grid.Column="3" HorizontalAlignment="Stretch" 
+            SelectedAsset="{Binding SelectedTile, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type assets:Asset}, AncestorLevel=1}}"
+            AssetList="{Binding TileList}"
+            CopyCommand="{Binding CopyTileCommand}"
+            DeleteCommand="{Binding DeleteTileCommand}"
+            EditCommand="{Binding EditTileCommand}"/>
     </Grid>
 </Window>

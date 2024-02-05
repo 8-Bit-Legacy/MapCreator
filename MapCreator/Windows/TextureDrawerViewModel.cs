@@ -5,7 +5,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media.TextFormatting;
+using CommunityToolkit.Mvvm.Input;
 using MapCreatorModels.Models.Assets;
 
 namespace MapCreator.Windows
@@ -13,7 +15,6 @@ namespace MapCreator.Windows
     public class TextureDrawerViewModel : INotifyPropertyChanged
     {
         #region Property
-
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
@@ -137,9 +138,31 @@ namespace MapCreator.Windows
         }
         #endregion
 
+
+        public ICommand SaveTextureCommand { get; }
+        private void SaveTexture()
+        {
+            AppSingleton.Instance.TextureCache.UpdateWritableBitmap(_textureToUpdate,_tempTexture);
+            _textureToUpdate.UpdateTexture(_tempTexture);
+        }
+
+        public ICommand DeleteCacheCommand { get; }
+        private void DeleteCache()
+        {
+            AppSingleton.Instance.TextureCache.DeleteTextureFromCache(_tempTexture);
+        }
+
+        private Texture _tempTexture;
+        private Texture _textureToUpdate;
+
+
         public TextureDrawerViewModel(Texture texture)
         {
-            Center = texture;
+            _textureToUpdate = texture;
+            _tempTexture = (Texture)texture.Clone();
+            SaveTextureCommand = new RelayCommand(SaveTexture);
+            DeleteCacheCommand = new RelayCommand(DeleteCache);
+            Center = _tempTexture;
         }
 
         public void ToggleMirorDisplay(bool toggle)

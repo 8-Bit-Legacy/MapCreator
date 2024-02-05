@@ -17,5 +17,10 @@ namespace MapCreator.Windows
             textureDrawerViewModel = new TextureDrawerViewModel(texture);
             this.DataContext = textureDrawerViewModel;
         }
+
+        private void ThisWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            textureDrawerViewModel.DeleteCacheCommand.Execute(null);
+        }
     }
 }

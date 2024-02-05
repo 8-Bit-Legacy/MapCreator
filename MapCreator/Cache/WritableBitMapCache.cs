@@ -15,7 +15,8 @@ namespace MapCreator.Cache
     {
         Dictionary<Texture, WriteableBitmap> WriteableBitmaps { get; set; } = new Dictionary<Texture, WriteableBitmap>();
 
-        public WriteableBitmap getTextureWritableBitMap(Texture texture) {
+        public WriteableBitmap getTextureWritableBitMap(Texture texture)
+        {
             if (texture == null)
                 return null;
 
@@ -33,6 +34,16 @@ namespace MapCreator.Cache
             }
 
             return writeableBitmap;
+        }
+
+        public void UpdateWritableBitmap(Texture toUpdate, Texture from)
+        {
+            FillWritableBitMapWithTexture(from, getTextureWritableBitMap(toUpdate));
+        }
+
+        public bool DeleteTextureFromCache(Texture texture)
+        {
+            return WriteableBitmaps.Remove(texture);
         }
 
         private void FillWritableBitMapWithTexture(Texture texture, WriteableBitmap writeableBitmap)
