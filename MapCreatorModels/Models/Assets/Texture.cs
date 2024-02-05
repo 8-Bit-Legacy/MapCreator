@@ -9,10 +9,17 @@ namespace MapCreatorModels.Models.Assets
     /// </summary>
     public class Texture
     {
-        [JsonInclude]
-        public int Height { get; init; } = 16;
-        [JsonInclude]
-        public int Width { get; init; } = 16;
+        public event EventHandler TextureUpdated;
+
+        protected virtual void OnTextureUpdated(EventArgs e)
+        {
+            TextureUpdated?.Invoke(this, new TextureUpdatedEventArgs() { Texture = this});
+        }
+
+        [JsonIgnore]
+        public static int Height { get; } = 16;
+        [JsonIgnore]
+        public static int Width { get; } = 16;
 
         GameColor[,] _color2DArray;
         /// <summary>
@@ -41,15 +48,6 @@ namespace MapCreatorModels.Models.Assets
         [JsonConstructor]
         public Texture()
         {
-            _color2DArray = new GameColor[Height, Width];
-            GameColor defaultColor = GameColorList.GetColorById(2);
-            FillWithColor(defaultColor);
-        }
-
-        public Texture(int height, int witdh)
-        {
-            Height = height;
-            Width = witdh;
             _color2DArray = new GameColor[Height, Width];
             GameColor defaultColor = GameColorList.GetColorById(2);
             FillWithColor(defaultColor);
@@ -156,11 +154,12 @@ namespace MapCreatorModels.Models.Assets
                     this._color2DArray[y, x] = texture._color2DArray[y, x];
                 }
             }
+            OnTextureUpdated(null);
         }
 
         public object Clone()
         {
-            Texture texture = new Texture(Height, Width);
+            Texture texture = new Texture();
 
             //Copy des references dans un nouvel array
             for (int y = 0; y < _color2DArray.GetLength(0); y++)

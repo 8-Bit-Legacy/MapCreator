@@ -17,23 +17,13 @@ using System.Windows.Input;
 
 namespace MapCreator
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel
     {
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
         public ObservableCollection<Asset> TileList { get; set; }
 
         public ObservableCollection<Asset> ActorList { get; set; }
 
         public ICommand AddTileCommand { get; }
-
 
         private void AddTile(object obj)
         {
@@ -60,14 +50,15 @@ namespace MapCreator
         }
 
         private bool CanCmdExec(object obj) => true;
-        public Tile SelectedTile { get; set; }
+        public Asset SelectedAsset { get; set; }
         public Actor SelectedActor { get; set; }
-        Map map { get; set; }
+        Map Map { get; set; }
 
         public MainWindowViewModel()
         {
             TileList = AppSingleton.Instance.TileFactory.GetObservableCollection();
             ActorList = AppSingleton.Instance.ActorFactory.GetObservableCollection();
+            Map = AppSingleton.Instance.Map;
 
             AddTileCommand = new RelayCommand<object>(AddTile, CanCmdExec);
             DeleteTileCommand = new RelayCommand<object>(DeleteTile, CanCmdExec);

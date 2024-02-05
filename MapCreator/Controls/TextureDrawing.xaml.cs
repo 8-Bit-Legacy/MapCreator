@@ -69,8 +69,8 @@ namespace MapCreator.Controls
 
             int mouseX = (int)e.GetPosition(DisplayedImage).X;
             int mouseY = (int)e.GetPosition(DisplayedImage).Y;
-            int column = (int)((mouseX - 1) / (DisplayedImage.ActualWidth / BoundTexture.Width));
-            int row = (int)((mouseY - 1) / (DisplayedImage.ActualHeight / BoundTexture.Height));
+            int column = (int)((mouseX - 1) / (DisplayedImage.ActualWidth / Texture.Width));
+            int row = (int)((mouseY - 1) / (DisplayedImage.ActualHeight / Texture.Height));
 
             try
             {

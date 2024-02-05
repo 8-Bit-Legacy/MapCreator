@@ -1,5 +1,6 @@
 ﻿
 using MapCreatorModels.Models.Assets;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace MapCreatorModels.Models
@@ -15,27 +16,39 @@ namespace MapCreatorModels.Models
     // Y
     public class Map
     {
-        [JsonInclude]
-        public int Height { get; init; }
+        public event EventHandler TextureUpdated;
 
-        [JsonInclude]
-        public int Width { get; init; }
-
-        [JsonInclude]
-        public static MapTile[,] MapTiles { get; private set; } = new MapTile[64, 64];
-
-        public static void SetTile(int x, int y, MapTile tile)
+        protected virtual void OnTextureUpdated(EventArgs e)
         {
-            MapTiles[y, x] = tile;
+            TextureUpdated?.Invoke(this, e);
+        }
+        void TextureUpdatedReceiver(object sender, EventArgs e)
+        {
+            OnTextureUpdated(e);
+        }
+        //Permet de verifier si on écoute déja l'event
+        [JsonIgnore]
+        private Dictionary<Texture, bool> _mapTiles = new Dictionary<Texture, bool>();
+
+        [JsonInclude]
+        public static  int Height { get; } = 64;
+
+        [JsonInclude]
+        public static int Width { get; } = 64;
+
+        [JsonInclude]
+        public MapTile[,] MapTiles { get; private set; } = new MapTile[64, 64];
+
+        public void SetTile(int x, int y, MapTile mapTile)
+        {
+            MapTiles[y, x] = mapTile;
+            if (!_mapTiles.ContainsKey(mapTile.Tile.Texture)) {
+                mapTile.Tile.Texture.TextureUpdated += TextureUpdatedReceiver;
+                _mapTiles.Add(mapTile.Tile.Texture, true);
+            }
         }
 
         [JsonConstructor]
         public Map() { }
-
-        public Map(int height, int width)
-        {
-            Height = height;
-            Width = width;
-        }
     }
 }

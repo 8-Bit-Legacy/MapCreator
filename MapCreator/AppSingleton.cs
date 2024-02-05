@@ -1,5 +1,6 @@
 ﻿using MapCreator.Cache;
 using MapCreatorModels.DAL;
+using MapCreatorModels.Models;
 using MapCreatorModels.Models.Assets.AssetsFactory;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace MapCreator
         public TileFactory TileFactory { get; init; }
         public ActorFactory ActorFactory { get; init; } = new ActorFactory();
         public WritableBitMapCache TextureCache { get; init; } = new WritableBitMapCache();
+        public Map Map { get; set; } = new Map();
 
         private AppSingleton()
         {

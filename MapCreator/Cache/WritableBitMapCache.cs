@@ -23,8 +23,8 @@ namespace MapCreator.Cache
             if (!WriteableBitmaps.TryGetValue(texture, out WriteableBitmap writeableBitmap))
             {
                 writeableBitmap = new WriteableBitmap(
-                    texture.Width,
-                    texture.Height,
+                    Texture.Width,
+                    Texture.Height,
                     1,
                     1,
                     PixelFormats.Pbgra32,
@@ -51,9 +51,9 @@ namespace MapCreator.Cache
             try
             {
                 writeableBitmap.Lock();
-                for (int y = 0; y < texture.Height; y++)
+                for (int y = 0; y < Texture.Height; y++)
                 {
-                    for (int x = 0; x < texture.Width; x++)
+                    for (int x = 0; x < Texture.Width; x++)
                     {
                         unsafe
                         {
@@ -76,7 +76,7 @@ namespace MapCreator.Cache
                         }
                     }
                 }
-                writeableBitmap.AddDirtyRect(new Int32Rect(0, 0, texture.Width, texture.Height));
+                writeableBitmap.AddDirtyRect(new Int32Rect(0, 0, Texture.Width, Texture.Height));
             }
             finally
             {

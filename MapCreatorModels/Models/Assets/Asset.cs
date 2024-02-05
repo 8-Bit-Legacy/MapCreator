@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace MapCreatorModels.Models.Assets
 {
+    [JsonDerivedType(typeof(Asset), typeDiscriminator: "asset")]
+    [JsonDerivedType(typeof(Tile), typeDiscriminator: "Tile")]
+    [JsonDerivedType(typeof(Actor), typeDiscriminator: "Actor")]
     public class Asset
     {
         [JsonInclude]
@@ -17,8 +20,7 @@ namespace MapCreatorModels.Models.Assets
         
         [JsonInclude]
         public Texture Texture { get; protected set; }
-
-        [JsonConstructor]
+        
         public Asset() { }
 
         protected Asset(byte id, string name)
