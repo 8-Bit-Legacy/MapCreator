@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MapCreatorModels.Models.Assets
 {
-    public abstract class Asset
+    public class Asset
     {
         [JsonInclude]
         public byte Id { get; internal set; }
@@ -19,7 +19,7 @@ namespace MapCreatorModels.Models.Assets
         public Texture Texture { get; protected set; }
 
         [JsonConstructor]
-        protected Asset() { }
+        public Asset() { }
 
         protected Asset(byte id, string name)
         {

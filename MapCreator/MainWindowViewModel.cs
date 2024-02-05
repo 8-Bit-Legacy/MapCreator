@@ -6,8 +6,10 @@ using MapCreatorModels.Models.Assets.AssetsFactory;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,16 +17,27 @@ using System.Windows.Input;
 
 namespace MapCreator
 {
-    public class MainWindowViewModel
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
         public ObservableCollection<Asset> TileList { get; set; }
+
         public ObservableCollection<Asset> ActorList { get; set; }
 
         public ICommand AddTileCommand { get; }
 
+
         private void AddTile(object obj)
         {
-            
+            AppSingleton.Instance.TileFactory.CreateAsset("New Tile");
         }
         public ICommand DeleteTileCommand { get;}
         private void DeleteTile(object obj)
@@ -60,15 +73,6 @@ namespace MapCreator
             DeleteTileCommand = new RelayCommand<object>(DeleteTile, CanCmdExec);
             EditTileCommand = new RelayCommand<object>(EditTile, CanCmdExec);
             CopyTileCommand = new RelayCommand<object>(CopyTile, CanCmdExec);
-        }
-
-        public void SaveAll() { 
-        
-        }
-
-        public void LoadAll()
-        {
-
         }
     }
 }

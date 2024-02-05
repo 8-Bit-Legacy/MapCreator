@@ -1,4 +1,5 @@
 ﻿using MapCreator.Cache;
+using MapCreatorModels.DAL;
 using MapCreatorModels.Models.Assets.AssetsFactory;
 using System;
 using System.Collections.Generic;
@@ -11,19 +12,19 @@ namespace MapCreator
     internal class AppSingleton
     {
         private static AppSingleton _instance;
-        public TileFactory TileFactory { get; init; } = new TileFactory();
+        public TileFactory TileFactory { get; init; }
         public ActorFactory ActorFactory { get; init; } = new ActorFactory();
         public WritableBitMapCache TextureCache { get; init; } = new WritableBitMapCache();
 
         private AppSingleton()
         {
+            TileFactory = Save.LoadTileFactory();
             TileFactory.InitializeList();
-            TileFactory.CreateAsset("Grass");
-            TileFactory.CreateAsset("Dirt");
-            TileFactory.CreateAsset("Water");
-            TileFactory.CreateAsset("Sand");
-            TileFactory.CreateAsset("Stone");
-            TileFactory.CreateAsset("Wood");
+        }
+
+        public void SaveState()
+        {
+            Save.SaveTileFactory(TileFactory);
         }
 
         public static AppSingleton Instance

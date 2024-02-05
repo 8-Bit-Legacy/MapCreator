@@ -138,7 +138,6 @@ namespace MapCreator.Windows
         }
         #endregion
 
-
         public ICommand SaveTextureCommand { get; }
         private void SaveTexture()
         {

@@ -50,13 +50,8 @@
                             <Image  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="80" Height="80" Source="{Binding Texture, Converter={StaticResource TextureConverter}}"/>
                         </Grid>
                     </Viewbox>
-                    <TextBlock Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" FontSize="40">
-                        <TextBlock.Text>
-                            <MultiBinding StringFormat="0{0}">
-                                <Binding Path="Name"/>
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
+                    <TextBox Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" FontSize="40" Text="{Binding Name, Mode=TwoWay}">
+                    </TextBox>
                 </Grid>
             </DataTemplate>
         </ListView.ItemTemplate>

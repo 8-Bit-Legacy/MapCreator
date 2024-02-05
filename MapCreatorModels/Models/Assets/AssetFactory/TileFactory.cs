@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MapCreatorModels.Models.Assets.AssetsFactory
 {
     public class TileFactory : AssetFactory<Tile>
     {
+        [JsonConstructor]
+        public TileFactory() { }
         public override Tile CopyAsset(Tile asset)
         {
             Tile tileCopy = new(AssetCount++, asset.Name + " Copy", (Texture)asset.Texture.Clone());
