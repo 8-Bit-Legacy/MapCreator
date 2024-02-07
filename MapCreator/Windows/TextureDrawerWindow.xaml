@@ -53,17 +53,17 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="1" Grid.Column="1" x:Name="TopLeftTexture"      BoundTexture="{Binding TopLeft, Mode=TwoWay}"/>
-                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="1" Grid.Column="2" x:Name="TopCenterTexture"    BoundTexture="{Binding Path=TopCenter, Mode=TwoWay}"/>
-                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="1" Grid.Column="3" x:Name="TopRightTexture"     BoundTexture="{Binding TopRight, Mode=TwoWay}"/>
-                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="2" Grid.Column="1" x:Name="CenterLeftTexture"   BoundTexture="{Binding CenterLeft, Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="True" Grid.Row="1" Grid.Column="1" x:Name="TopLeftTexture"      BoundTexture="{Binding TopLeft, Mode=TwoWay}" SelectedColor="{Binding SelectedGameColor, Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="True" Grid.Row="1" Grid.Column="2" x:Name="TopCenterTexture"    BoundTexture="{Binding Path=TopCenter, Mode=TwoWay}" SelectedColor="{Binding SelectedGameColor, Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="True" Grid.Row="1" Grid.Column="3" x:Name="TopRightTexture"     BoundTexture="{Binding TopRight, Mode=TwoWay}" SelectedColor="{Binding SelectedGameColor, Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="True" Grid.Row="2" Grid.Column="1" x:Name="CenterLeftTexture"   BoundTexture="{Binding CenterLeft, Mode=TwoWay}" SelectedColor="{Binding SelectedGameColor, Mode=TwoWay}"/>
                 <Border BorderThickness="3" BorderBrush="Black" Grid.Row="2" Grid.Column="2">
                     <controls:TextureDrawing IsDrawable="True"   x:Name="CenterTexture"       BoundTexture="{Binding Path=Center, Mode=TwoWay}" SelectedColor="{Binding SelectedGameColor, Mode=TwoWay}"/>
                 </Border>
-                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="2" Grid.Column="3" x:Name="RightTexture"        BoundTexture="{Binding CenterRight , Mode=TwoWay}"/>
-                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="3" Grid.Column="1" x:Name="BottomLeftTexture"   BoundTexture="{Binding BottomLeft, Mode=TwoWay}"/>
-                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="3" Grid.Column="2" x:Name="BottomCenterTexture" BoundTexture="{Binding BottomCenter, Mode=TwoWay}"/>
-                <controls:TextureDrawing Margin="0.05" IsDrawable="False" Grid.Row="3" Grid.Column="3" x:Name="BottomRightTexture"  BoundTexture="{Binding BottomRight, Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="True" Grid.Row="2" Grid.Column="3" x:Name="RightTexture"        BoundTexture="{Binding CenterRight , Mode=TwoWay}" SelectedColor="{Binding SelectedGameColor, Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="True" Grid.Row="3" Grid.Column="1" x:Name="BottomLeftTexture"   BoundTexture="{Binding BottomLeft, Mode=TwoWay}" SelectedColor="{Binding SelectedGameColor, Mode=TwoWay}"/>
+                    <controls:TextureDrawing Margin="0.05" IsDrawable="True" Grid.Row="3" Grid.Column="2" x:Name="BottomCenterTexture" BoundTexture="{Binding BottomCenter, Mode=TwoWay}" SelectedColor="{Binding SelectedGameColor, Mode=TwoWay}"/>
+                <controls:TextureDrawing Margin="0.05" IsDrawable="True" Grid.Row="3" Grid.Column="3" x:Name="BottomRightTexture"  BoundTexture="{Binding BottomRight, Mode=TwoWay}" SelectedColor="{Binding SelectedGameColor, Mode=TwoWay}"/>
             </Grid>
         </Viewbox>
 
