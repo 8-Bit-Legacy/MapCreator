@@ -38,8 +38,12 @@ namespace MapCreatorModels.Models.Assets.AssetsFactory
         }
         public override void RearrangeList()
         {
+            _assetDictionnary = new Dictionary<byte, Asset>();
             for (int i = 0; i < _assetList.Count; i++)
+            {
                 _assetList[i].Id = (byte)i;
+                _assetDictionnary.Add((byte)i, _assetList[i]);
+            }
             AssetCount = (byte)_assetList.Count;
         }
     }

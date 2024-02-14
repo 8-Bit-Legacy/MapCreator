@@ -1,7 +1,7 @@
-﻿using System.Text.Json;
-using MapCreatorModels.Models;
+﻿using MapCreatorModels.Models;
 using MapCreatorModels.Models.Assets;
 using MapCreatorModels.Models.Assets.AssetsFactory;
+using System.Text.Json;
 
 namespace MapCreatorModels.DAL
 {
@@ -24,6 +24,22 @@ namespace MapCreatorModels.DAL
                 return JsonSerializer.Deserialize<TileFactory>(json);
             }
             return new TileFactory();
+        }
+
+        public static void SaveMap(Map map)
+        {
+            string json = JsonSerializer.Serialize(map);
+            System.IO.File.WriteAllText(mapFileName, json);
+        }
+
+        public static Map LoadMap()
+        {
+            if (File.Exists(mapFileName))
+            {
+                string json = System.IO.File.ReadAllText(mapFileName);
+                return JsonSerializer.Deserialize<Map>(json);
+            }
+            return new Map(64,64);
         }
     }
 }

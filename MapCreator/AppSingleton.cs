@@ -16,17 +16,21 @@ namespace MapCreator
         public TileFactory TileFactory { get; init; }
         public ActorFactory ActorFactory { get; init; } = new ActorFactory();
         public WritableBitMapCache TextureCache { get; init; } = new WritableBitMapCache();
-        public Map Map { get; set; } = new Map();
+        public Map Map { get; set; }
 
         private AppSingleton()
         {
             TileFactory = Save.LoadTileFactory();
             TileFactory.InitializeList();
+            Map = Save.LoadMap();
+            Map.InitMap(TileFactory);
         }
 
         public void SaveState()
         {
+            TileFactory.RearrangeList();
             Save.SaveTileFactory(TileFactory);
+            Save.SaveMap(Map);
         }
 
         public static AppSingleton Instance

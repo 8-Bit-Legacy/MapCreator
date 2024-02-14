@@ -157,6 +157,17 @@ namespace MapCreatorModels.Models.Assets
             OnTextureUpdated(null);
         }
 
+        public void FillTextureWithColor(GameColor color) {
+            for (int y = 0; y < _color2DArray.GetLength(0); y++)
+            {
+                for (int x = 0; x < _color2DArray.GetLength(1); x++)
+                {
+                    this._color2DArray[y, x] = color;
+                }
+            }
+            OnTextureUpdated(null);
+        }
+
         public object Clone()
         {
             Texture texture = new Texture();

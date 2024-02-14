@@ -1,22 +1,12 @@
 ﻿using MapCreatorModels.Models;
 using MapCreatorModels.Models.Assets;
-using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.TextFormatting;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MapCreator.Controls
 {
@@ -25,6 +15,13 @@ namespace MapCreator.Controls
     /// </summary>
     public partial class MapDrawer : UserControl
     {
+        Texture defaultTexture = new Texture();
+        void TileRemovedReceiver(object sender, EventArgs e)
+        {
+            TileRemovedEventArgs tileRemovedEventArgs = (TileRemovedEventArgs)e;
+            DrawTexture(tileRemovedEventArgs.Col, tileRemovedEventArgs.Row, defaultTexture);
+        }
+
         public static readonly DependencyProperty SelectedAssetProperty =
             DependencyProperty.Register("SelectedAsset",
             typeof(Asset), typeof(MapDrawer));
@@ -35,11 +32,14 @@ namespace MapCreator.Controls
             set { SetValue(SelectedAssetProperty, value); }
         }
         public WriteableBitmap Bitmap { get; set; }
-        Map map = new Map();
+        Map map;
 
         public MapDrawer()
         {
+            defaultTexture.FillTextureWithColor(GameColorList.GetColorById(0));
+            map = AppSingleton.Instance.Map;
             InitializeComponent();
+
             Bitmap = new WriteableBitmap(
                     Map.Width * Texture.Width,
                     Map.Height * Texture.Height,
@@ -50,17 +50,35 @@ namespace MapCreator.Controls
             DisplayedImage.Source = Bitmap;
             RenderOptions.SetBitmapScalingMode(DisplayedImage, BitmapScalingMode.NearestNeighbor);
             map.TextureUpdated += UpdateTexture;
+            map.OnTileRemoved += TileRemovedReceiver;
+            InitMap();
         }
 
-        private void UpdateTexture(object sender, EventArgs args) {
+        private void InitMap()
+        {
+            for (int y = 0; y < Map.Height; y++)
+            {
+                for (int x = 0; x < Map.Width; x++)
+                {
+                    MapTile maptile = map.getMapTile(x, y);
+                    if (maptile != null)
+                    {
+                        DrawTexture(y * Texture.Height, x * Texture.Width, maptile.Tile.Texture);
+                    }
+                }
+            }
+        }
+
+        private void UpdateTexture(object sender, EventArgs args)
+        {
             TextureUpdatedEventArgs eventArg = (TextureUpdatedEventArgs)args;
             for (int y = 0; y < Map.Height; y++)
             {
                 for (int x = 0; x < Map.Width; x++)
                 {
-                    if (map.MapTiles[y,x] != null && map.MapTiles[y,x].Tile.Texture == eventArg.Texture)
+                    if (map.getMapTile(x, y) != null && map.getMapTile(x, y).Tile.Texture == eventArg.Texture)
                     {
-                        DrawTile(y * Texture.Height, x * Texture.Width);
+                        DrawTexture(y * Texture.Height, x * Texture.Width, map.getMapTile(x, y).Tile.Texture);
                     }
                 }
             }
@@ -69,7 +87,7 @@ namespace MapCreator.Controls
         private bool UpdateMapTile(int x, int y)
         {
             //Verifier si ta tile a bel et bien besoin d'update
-            if (map.MapTiles[y, x] == null || map.MapTiles[y, x].Tile.Texture != SelectedAsset.Texture)
+            if (map.getMapTile(x, y) == null || map.getMapTile(x, y).Tile.Texture != SelectedAsset.Texture)
             {
                 map.SetTile(x, y, new MapTile((Tile)SelectedAsset));
                 return true;
@@ -84,7 +102,11 @@ namespace MapCreator.Controls
         {
             if (SelectedAsset == null)
                 return;
+            DrawTexture(row, column, SelectedAsset.Texture);
+        }
 
+        private void DrawTexture(int row, int column, Texture texture)
+        {
             try
             {
                 // Reserve the back buffer for updates.
@@ -95,7 +117,7 @@ namespace MapCreator.Controls
                     {
                         for (int x = 0; x < Texture.Width; x++)
                         {
-                            GameColor color = SelectedAsset.Texture.GetColor(x, y);
+                            GameColor color = texture.GetColor(x, y);
 
                             // Get a pointer to the back buffer.
                             IntPtr pBackBuffer = Bitmap.BackBuffer;
@@ -126,6 +148,8 @@ namespace MapCreator.Controls
 
         private void DrawTileFromMouse(MouseEventArgs e)
         {
+            if (SelectedAsset == null)
+                return;
             int mouseX = (int)e.GetPosition(DisplayedImage).X;
             int mouseY = (int)e.GetPosition(DisplayedImage).Y;
             //Donne valeurs topLeft de la case

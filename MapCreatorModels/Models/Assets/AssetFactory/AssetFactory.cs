@@ -13,6 +13,13 @@ namespace MapCreatorModels.Models.Assets.AssetsFactory
 {
     public abstract class AssetFactory<T>
     {
+        public event EventHandler AssetRemoved;
+
+        protected virtual void OnAssetRemoved(EventArgs e)
+        {
+            AssetRemoved?.Invoke(this, e);
+        }
+
         [JsonConstructor]
         public AssetFactory() { }
         [JsonInclude]
@@ -29,13 +36,16 @@ namespace MapCreatorModels.Models.Assets.AssetsFactory
 
         public abstract T CopyAsset(T asset);
         public abstract T CopyAsset(byte asset);
-        public Asset GetAssetById(byte id) {
+        public Asset GetAssetById(byte id)
+        {
             return _assetDictionnary[id];
         }
 
         public bool DeleteAsset(byte id)
         {
+            Asset asset = _assetDictionnary[id];
             _assetList.Remove(_assetDictionnary[id]);
+            AssetRemoved?.Invoke(this, new AssetRemovedEventArgs() { Asset = asset });
             return _assetDictionnary.Remove(id);
         }
 
