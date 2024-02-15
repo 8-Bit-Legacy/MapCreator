@@ -6,8 +6,10 @@
              xmlns:local="clr-namespace:MapCreator.Controls"
              xmlns:converter ="clr-namespace:MapCreator.Converter"
              mc:Ignorable="d"
-             Background="LightGray">
-    <ListBox x:Name="GameColorListBox" ItemsSource="{Binding GameColors}" SelectedItem="{Binding SelectedColor}">
+             Background="LightGray"
+             x:Name="Uc">
+
+    <ListBox x:Name="GameColorListBox" ItemsSource="{Binding Path=ColorList, ElementName=Uc, Mode=OneWay}" SelectedItem="{Binding Path=SelectedColor, ElementName=Uc, Mode=TwoWay}">
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <Grid HorizontalAlignment="Stretch">

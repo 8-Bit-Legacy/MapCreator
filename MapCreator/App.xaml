@@ -6,5 +6,6 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <converter:BitmapToImageSourceConverter x:Key="BitmapConverter"/>
+        <converter:TextureToWritableBitMap x:Key="TextureConverter"/>
     </Application.Resources>
 </Application>
