@@ -10,7 +10,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Controls\Images\copy.png" />
+    <None Remove="Controls\Images\delete.png" />
+    <None Remove="Controls\Images\edit.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MapCreatorModels\MapCreatorModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Controls\Images\copy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Controls\Images\delete.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Controls\Images\edit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

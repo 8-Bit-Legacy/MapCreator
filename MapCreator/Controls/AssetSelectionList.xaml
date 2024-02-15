@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="MapCreator.Controls.AssetSelectionList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MapCreator.Controls"
+             mc:Ignorable="d"
+             Name="Uc"
+             Background="LightGray">
+    <ListView x:Name="AssetListBox" ItemsSource="{Binding Path=AssetList, ElementName=Uc, Mode=OneWay}" SelectedItem="{Binding Path=SelectedAsset, ElementName=Uc, Mode=TwoWay}">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Stretch">
+                        <Button 
+                            Command="{Binding Path=EditCommand, ElementName=Uc}"
+                            CommandParameter="{Binding Id}">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Image  Source="./Images/edit.png"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button
+                            Command="{Binding Path=CopyCommand, ElementName=Uc}"
+                            CommandParameter="{Binding Id}">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Image  Source="./Images/copy.png"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button 
+                            Command="{Binding Path=DeleteCommand, ElementName=Uc}"
+                            CommandParameter="{Binding Id}">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Image  Source="./Images/delete.png"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+                    <Viewbox Stretch="Uniform" Grid.Column="1">
+                        <Grid Background="Black">
+                            <Image  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="80" Height="80" Source="{Binding Texture, Converter={StaticResource TextureConverter}}"/>
+                        </Grid>
+                    </Viewbox>
+                    <TextBox Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" FontSize="40" Text="{Binding Name, Mode=TwoWay}">
+                    </TextBox>
+                </Grid>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</UserControl>

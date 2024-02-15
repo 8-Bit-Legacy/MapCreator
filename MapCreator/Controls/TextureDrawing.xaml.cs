@@ -1,12 +1,9 @@
-﻿using MapCreator.Cache;
-using MapCreatorModels.Models.Assets;
-using System.Data.Common;
+﻿using MapCreatorModels.Models.Assets;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.TextFormatting;
 
 namespace MapCreator.Controls
 {
@@ -72,8 +69,8 @@ namespace MapCreator.Controls
 
             int mouseX = (int)e.GetPosition(DisplayedImage).X;
             int mouseY = (int)e.GetPosition(DisplayedImage).Y;
-            int column = (int)((mouseX - 1) / (DisplayedImage.ActualWidth / BoundTexture.Width));
-            int row = (int)((mouseY - 1) / (DisplayedImage.ActualHeight / BoundTexture.Height));
+            int column = (int)((mouseX - 1) / (DisplayedImage.ActualWidth / Texture.Width));
+            int row = (int)((mouseY - 1) / (DisplayedImage.ActualHeight / Texture.Height));
 
             try
             {

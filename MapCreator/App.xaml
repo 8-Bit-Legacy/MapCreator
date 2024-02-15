@@ -7,5 +7,7 @@
     <Application.Resources>
         <converter:BitmapToImageSourceConverter x:Key="BitmapConverter"/>
         <converter:TextureToWritableBitMap x:Key="TextureConverter"/>
+        <converter:ActorToAssetConverter x:Key="ActorConverter"/>
+        <converter:TileToAssetConverter x:Key="TileConverter"/>
     </Application.Resources>
 </Application>

@@ -1,61 +1,45 @@
-﻿using System.Text.Json;
-using MapCreatorModels.Models;
+﻿using MapCreatorModels.Models;
 using MapCreatorModels.Models.Assets;
+using MapCreatorModels.Models.Assets.AssetsFactory;
+using System.Text.Json;
 
 namespace MapCreatorModels.DAL
 {
     public static class Save
     {
-        private const string tileFileName = "tiles.json";
+        private const string tileFactoryFileName = "tileFactory.json";
         private const string mapFileName = "map.json";
-        public static void SaveTiles(List<Tile> tiles)
+
+        public static void SaveTileFactory(TileFactory tileFactory)
         {
-            string jsonString = JsonSerializer.Serialize(tiles);
-            File.WriteAllText(tileFileName, jsonString);
+            string json = JsonSerializer.Serialize(tileFactory);
+            System.IO.File.WriteAllText(tileFactoryFileName, json);
+        }
+
+        public static TileFactory LoadTileFactory()
+        {
+            if (File.Exists(tileFactoryFileName))
+            {
+                string json = System.IO.File.ReadAllText(tileFactoryFileName);
+                return JsonSerializer.Deserialize<TileFactory>(json);
+            }
+            return new TileFactory();
         }
 
         public static void SaveMap(Map map)
         {
-            string jsonString = JsonSerializer.Serialize(map);
-            File.WriteAllText(tileFileName, jsonString);
-        }
-
-        public static Tile[] LoadTiles()
-        {
-            string jsonString = File.ReadAllText(tileFileName);
-            
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-                Tile[] tiles = JsonSerializer.Deserialize<Tile[]>(jsonString);
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-
-            if (tiles is null)
-                throw new Exception("Error while loading tiles");
-
-            return tiles;
+            string json = JsonSerializer.Serialize(map);
+            System.IO.File.WriteAllText(mapFileName, json);
         }
 
         public static Map LoadMap()
         {
-            string jsonString = File.ReadAllText(mapFileName);
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            Map map  = JsonSerializer.Deserialize<Map>(jsonString);
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-            return map;
-        }
-
-        public static Texture LoadTexture()
-        {
-            string jsonString = File.ReadAllText("texture.json");
-            #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            Texture texture = JsonSerializer.Deserialize<Texture>(jsonString);
-            #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-            return texture;
-        }
-
-        public static void SaveTexture(Texture texture)
-        {
-            string jsonString = JsonSerializer.Serialize(texture);
-            File.WriteAllText("texture.json", jsonString);
+            if (File.Exists(mapFileName))
+            {
+                string json = System.IO.File.ReadAllText(mapFileName);
+                return JsonSerializer.Deserialize<Map>(json);
+            }
+            return new Map(64,64);
         }
     }
 }

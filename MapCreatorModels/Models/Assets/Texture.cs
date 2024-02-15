@@ -7,10 +7,19 @@ namespace MapCreatorModels.Models.Assets
     /// Une texture est un tableau de 128 bytes
     /// Chaques octets représente deux pixels
     /// </summary>
-    public class Texture : ICloneable
+    public class Texture
     {
-        public int Height { get; init; } = 16;
-        public int Width { get; init; } = 16;
+        public event EventHandler TextureUpdated;
+
+        protected virtual void OnTextureUpdated(EventArgs e)
+        {
+            TextureUpdated?.Invoke(this, new TextureUpdatedEventArgs() { Texture = this});
+        }
+
+        [JsonIgnore]
+        public static int Height { get; } = 16;
+        [JsonIgnore]
+        public static int Width { get; } = 16;
 
         GameColor[,] _color2DArray;
         /// <summary>
@@ -39,15 +48,6 @@ namespace MapCreatorModels.Models.Assets
         [JsonConstructor]
         public Texture()
         {
-            _color2DArray = new GameColor[Height, Width];
-            GameColor defaultColor = GameColorList.GetColorById(2);
-            FillWithColor(defaultColor);
-        }
-
-        public Texture(int height, int witdh)
-        {
-            Height = height;
-            Width = witdh;
             _color2DArray = new GameColor[Height, Width];
             GameColor defaultColor = GameColorList.GetColorById(2);
             FillWithColor(defaultColor);
@@ -141,9 +141,36 @@ namespace MapCreatorModels.Models.Assets
             return colors;
         }
 
+        /// <summary>
+        /// Copies Gamecolor array into the current texture
+        /// </summary>
+        /// <param name="texture"></param>
+        public void UpdateTexture(Texture texture)
+        {
+            for (int y = 0; y < _color2DArray.GetLength(0); y++)
+            {
+                for (int x = 0; x < _color2DArray.GetLength(1); x++)
+                {
+                    this._color2DArray[y, x] = texture._color2DArray[y, x];
+                }
+            }
+            OnTextureUpdated(null);
+        }
+
+        public void FillTextureWithColor(GameColor color) {
+            for (int y = 0; y < _color2DArray.GetLength(0); y++)
+            {
+                for (int x = 0; x < _color2DArray.GetLength(1); x++)
+                {
+                    this._color2DArray[y, x] = color;
+                }
+            }
+            OnTextureUpdated(null);
+        }
+
         public object Clone()
         {
-            Texture texture = new Texture(Height, Width);
+            Texture texture = new Texture();
 
             //Copy des references dans un nouvel array
             for (int y = 0; y < _color2DArray.GetLength(0); y++)

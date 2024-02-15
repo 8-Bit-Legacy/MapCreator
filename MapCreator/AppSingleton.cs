@@ -1,5 +1,7 @@
 ﻿using MapCreator.Cache;
-using MapCreatorModels.Models.Assets;
+using MapCreatorModels.DAL;
+using MapCreatorModels.Models;
+using MapCreatorModels.Models.Assets.AssetsFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,32 +12,36 @@ namespace MapCreator
 {
     internal class AppSingleton
     {
-        private static AppSingleton instance;
-
-
-        public TileFactory TileFactory { get; init; } = new TileFactory();
+        private static AppSingleton _instance;
+        public TileFactory TileFactory { get; init; }
+        public ActorFactory ActorFactory { get; init; } = new ActorFactory();
         public WritableBitMapCache TextureCache { get; init; } = new WritableBitMapCache();
+        public Map Map { get; set; }
 
         private AppSingleton()
         {
-            TileFactory.InitializeTileList();
-            TileFactory.CreateTile("Grass");
-            TileFactory.CreateTile("Dirt");
-            TileFactory.CreateTile("Water");
-            TileFactory.CreateTile("Sand");
-            TileFactory.CreateTile("Stone");
-            TileFactory.CreateTile("Wood");
+            TileFactory = Save.LoadTileFactory();
+            TileFactory.InitializeList();
+            Map = Save.LoadMap();
+            Map.InitMap(TileFactory);
+        }
+
+        public void SaveState()
+        {
+            TileFactory.RearrangeList();
+            Save.SaveTileFactory(TileFactory);
+            Save.SaveMap(Map);
         }
 
         public static AppSingleton Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new AppSingleton();
+                    _instance = new AppSingleton();
                 }
-                return instance;
+                return _instance;
             }
         }
     }
