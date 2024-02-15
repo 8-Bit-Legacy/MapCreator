@@ -1,14 +1,7 @@
 ﻿using MapCreatorModels.Models.Assets;
-using System.Text;
+using MapCreatorModels.DAL;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using MapCreator.Windows;
 
 namespace MapCreator
 {
@@ -20,7 +13,18 @@ namespace MapCreator
         public MainWindow()
         {
             InitializeComponent();
-            TextureDrawing.BoundTexture = new Texture();
+            this.DataContext = new MainWindowViewModel();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Tile tile = AppSingleton.Instance.TileFactory.CreateTile("Hi");
+            TextureDrawerWindow textureDrawerWindow = new(tile.Texture);
+            textureDrawerWindow.Show();
         }
     }
 }

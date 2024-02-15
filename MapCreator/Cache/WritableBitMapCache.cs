@@ -55,7 +55,7 @@ namespace MapCreator.Cache
 
                             // Compute the pixel's color.
                             GameColor color = texture.GetColor(x, y);
-                            int color_data = 255 << 24; // A
+                            int color_data = 0 << 24; // A
                             color_data = color.Red << 16; // R
                             color_data |= color.Green << 8;   // G
                             color_data |= color.Blue << 0;   // B

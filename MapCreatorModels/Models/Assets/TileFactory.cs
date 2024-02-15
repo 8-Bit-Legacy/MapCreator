@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace MapCreatorModels.Models.Assets
 {
@@ -15,13 +17,18 @@ namespace MapCreatorModels.Models.Assets
         public TileFactory() { }
         [JsonInclude]
         public byte TileCount { get; private set; }
+
         [JsonInclude]
         private Dictionary<byte, Tile> _tiles { get; set; } = [];
+
+        [JsonIgnore]
+        private ObservableCollection<Tile> tileList = new ObservableCollection<Tile>();
 
         public Tile CreateTile(string name)
         {
             Tile tile = new(TileCount++, name);
             _tiles.Add((byte)tile.Id, tile);
+            tileList.Add(tile);
             return tile;
         }
 
@@ -30,7 +37,8 @@ namespace MapCreatorModels.Models.Assets
             return _tiles[id];
         }
         public bool DeleteTile(byte id)
-        {
+        {   
+            tileList.Remove(_tiles[id]);
             return _tiles.Remove(id);
         }
         /// <summary>
@@ -41,12 +49,21 @@ namespace MapCreatorModels.Models.Assets
         {
             Tile tileCopy = new(TileCount++, tile.Name + " Copy", tile.Texture);
             _tiles.Add((byte)tile.Id, tile);
+            tileList.Add(tile);
             return tileCopy;
         }
 
-        public Tile[] GetTiles()
+        public ObservableCollection<Tile> GetTiles()
         {
-            return _tiles.Values.ToArray();
+            return tileList;
+        }
+
+        public void InitializeTileList()
+        {
+            foreach (var tile in _tiles)
+            {
+                tileList.Add(tile.Value);
+            }
         }
     }
 }

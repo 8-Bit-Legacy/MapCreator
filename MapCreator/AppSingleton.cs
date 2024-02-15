@@ -18,6 +18,13 @@ namespace MapCreator
 
         private AppSingleton()
         {
+            TileFactory.InitializeTileList();
+            TileFactory.CreateTile("Grass");
+            TileFactory.CreateTile("Dirt");
+            TileFactory.CreateTile("Water");
+            TileFactory.CreateTile("Sand");
+            TileFactory.CreateTile("Stone");
+            TileFactory.CreateTile("Wood");
         }
 
         public static AppSingleton Instance

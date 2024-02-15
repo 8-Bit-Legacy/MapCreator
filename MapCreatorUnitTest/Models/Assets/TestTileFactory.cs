@@ -1,4 +1,5 @@
 ﻿using MapCreatorModels.Models.Assets;
+using System.Collections.ObjectModel;
 using System.Text.Json;
 namespace MapCreatorUnitTest.Models.Assets
 {
@@ -23,7 +24,7 @@ namespace MapCreatorUnitTest.Models.Assets
                 tileFactory.CreateTile("test " + i);
             }
 
-            Tile[] tiles = tileFactory.GetTiles();
+            ObservableCollection<Tile> tiles = tileFactory.GetTiles();
 
             string jsonString = JsonSerializer.Serialize(tileFactory);
 

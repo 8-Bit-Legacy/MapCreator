@@ -6,8 +6,19 @@
         xmlns:local="clr-namespace:MapCreator"
         xmlns:controls ="clr-namespace:MapCreator.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid Background="Black">
-        <controls:TextureDrawing x:Name="TextureDrawing" Height="200" Width="200"></controls:TextureDrawing>
+        Title="MainWindow" Height="450" Width="800" Closing="Window_Closing">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <GridSplitter Grid.Column="2"
+              Width="2" Background="Black" 
+              VerticalAlignment="Stretch" 
+              HorizontalAlignment="Center"/>
+        <controls:TileSelectionList Grid.Column="2" HorizontalAlignment="Stretch" SelectedTile="{Binding SelectedTile, Mode=TwoWay}" TileList="{Binding TileList}"/>
     </Grid>
 </Window>
