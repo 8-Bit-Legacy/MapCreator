@@ -19,7 +19,7 @@ namespace MapCreator.Controls
         void TileRemovedReceiver(object sender, EventArgs e)
         {
             TileRemovedEventArgs tileRemovedEventArgs = (TileRemovedEventArgs)e;
-            DrawTexture(tileRemovedEventArgs.Col, tileRemovedEventArgs.Row, defaultTexture);
+            DrawTexture(tileRemovedEventArgs.Row * Texture.Height, tileRemovedEventArgs.Col * Texture.Width, defaultTexture);
         }
 
         public static readonly DependencyProperty SelectedAssetProperty =
