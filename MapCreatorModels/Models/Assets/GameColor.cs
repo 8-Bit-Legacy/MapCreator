@@ -1,8 +1,11 @@
-﻿
+﻿using System.Drawing;
+
 namespace MapCreatorModels.Models.Assets
 {
     public class GameColor
     {
+        public Bitmap Bitmap { get; set; }
+
         public byte Id { get; }
         private int _colorValue;
         public int ColorValue
@@ -37,10 +40,16 @@ namespace MapCreatorModels.Models.Assets
             private set { _blue = value; }
         }
 
+        public string Name { get; init; }
+
         public GameColor(int ColorValue, byte Id)
         {
             this.ColorValue = ColorValue;
+            Name = Convert.ToHexString([Red, Green, Blue]);
             this.Id = Id;
+            Bitmap = new Bitmap(1, 1);
+            Bitmap.SetPixel(0, 0, System.Drawing.Color.FromArgb(255, Red, Green, Blue));
+
         }
     }
 }
