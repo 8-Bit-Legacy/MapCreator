@@ -11,20 +11,23 @@ namespace MapCreatorModels.Models.Assets
     {
         public int Height { get; init; } = 16;
         public int Width { get; init; } = 16;
-        //NE PAS CHAGER LA VALEUR DE L'ARRAY DIRECTEMENT PASSER PAR LES METHODES
 
         GameColor[,] _color2DArray;
+        /// <summary>
+        /// Utiser getColor et setColor pour modifier les couleurs
+        /// </summary>
         [JsonIgnore]
         public GameColor[,] Color2DArray
         {
-            get { return _color2DArray; }
+            get { return (GameColor[,])_color2DArray.Clone();}
             private set { }
         }
 
+        public bool IsColor2DArray { get; private set; } = false;
+
         // Propriete pour le ColorAsSting et le FPGA plus tard
-        // Ne pas utiliser directement dans le code.
         [JsonIgnore]
-        public byte[] ColorByteArray { get { return ColorArray2ColorByteArray(_color2DArray); } }
+        private byte[] ColorByteArray { get { return ColorArray2ColorByteArray(_color2DArray); } }
 
         // Pour le Json seulement, permet de sauver de l'espace dans le fichier json
         [JsonInclude]
@@ -59,6 +62,7 @@ namespace MapCreatorModels.Models.Assets
                     _color2DArray[y, x] = color;
                 }
             }
+            IsColor2DArray = true;
         }
 
         public GameColor GetColor(int x, int y)
@@ -74,6 +78,7 @@ namespace MapCreatorModels.Models.Assets
         public void SetColor(byte colorId, int x, int y)
         {
             _color2DArray[y, x] = GameColorList.GetColorById(colorId);
+            IsColor2DArray = true;
         }
 
         /// <summary>

@@ -2,9 +2,9 @@
 using MapCreatorModels.Models;
 using MapCreatorModels.Models.Assets;
 
-namespace MapCreator.DAL
+namespace MapCreatorModels.DAL
 {
-    internal static class Save
+    public static class Save
     {
         private const string tileFileName = "tiles.json";
         private const string mapFileName = "map.json";
@@ -41,6 +41,21 @@ namespace MapCreator.DAL
             Map map  = JsonSerializer.Deserialize<Map>(jsonString);
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             return map;
+        }
+
+        public static Texture LoadTexture()
+        {
+            string jsonString = File.ReadAllText("texture.json");
+            #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+            Texture texture = JsonSerializer.Deserialize<Texture>(jsonString);
+            #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+            return texture;
+        }
+
+        public static void SaveTexture(Texture texture)
+        {
+            string jsonString = JsonSerializer.Serialize(texture);
+            File.WriteAllText("texture.json", jsonString);
         }
     }
 }
