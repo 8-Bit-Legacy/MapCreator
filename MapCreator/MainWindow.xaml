@@ -17,25 +17,37 @@
             <MenuItem Header="Tile">
                 <MenuItem Header="Create" Command="{Binding AddTileCommand}"/>
             </MenuItem>
+            <MenuItem Header="Actor">
+                <MenuItem Header="Create" Command="{Binding AddActorCommand}"/>
+            </MenuItem>
         </Menu>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <controls:MapDrawer Grid.Column="0" SelectedAsset="{Binding SelectedAsset}"></controls:MapDrawer>
-            <GridSplitter Grid.Column="2"
-              Width="2" Background="Black" 
-              VerticalAlignment="Stretch" 
-              HorizontalAlignment="Center"/>
-            <controls:AssetSelectionList Grid.Column="3" HorizontalAlignment="Stretch" 
-            SelectedAsset="{Binding SelectedAsset, Mode=TwoWay}"
-            AssetList="{Binding TileList}"
-            CopyCommand="{Binding CopyTileCommand}"
-            DeleteCommand="{Binding DeleteTileCommand}"
-            EditCommand="{Binding EditTileCommand}"/>
+            <controls:MapDrawer Grid.Column="0" SelectedAsset="{Binding SelectedTile}"></controls:MapDrawer>
+            <Grid Grid.Column="2" HorizontalAlignment="Stretch" >
+                <TabControl>
+                    <TabItem Header="Tiles">
+                        <controls:AssetSelectionList  
+                            SelectedAsset="{Binding SelectedTile, Mode=TwoWay}"
+                            AssetList="{Binding TileList}"
+                            CopyCommand="{Binding CopyTileCommand}"
+                            DeleteCommand="{Binding DeleteTileCommand}"
+                            EditCommand="{Binding EditTileCommand}"/>
+                    </TabItem>
+                    <TabItem Header="Actors">
+                        <controls:AssetSelectionList  
+                            SelectedAsset="{Binding SelectedActor, Mode=TwoWay}"
+                            AssetList="{Binding ActorList}"
+                            CopyCommand="{Binding CopyActorCommand}"
+                            DeleteCommand="{Binding DeleteActorCommand}"
+                            EditCommand="{Binding EditActorCommand}"/>
+                    </TabItem>
+                </TabControl>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

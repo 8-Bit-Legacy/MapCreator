@@ -21,10 +21,7 @@ namespace MapCreator
     {
         public ObservableCollection<Asset> TileList { get; set; }
 
-        public ObservableCollection<Asset> ActorList { get; set; }
-
         public ICommand AddTileCommand { get; }
-
         private void AddTile(object obj)
         {
             AppSingleton.Instance.TileFactory.CreateAsset("New Tile");
@@ -48,12 +45,39 @@ namespace MapCreator
         {
             AppSingleton.Instance.TileFactory.CopyAsset((byte)obj);
         }
+        public Asset SelectedTile { get; set; }
 
-        private bool CanCmdExec(object obj) => true;
-        public Asset SelectedAsset { get; set; }
-        public Actor SelectedActor { get; set; }
+        public ObservableCollection<Asset> ActorList { get; set; }
+
+        public ICommand AddActorCommand { get; }
+        private void AddActor(object obj)
+        {
+            AppSingleton.Instance.ActorFactory.CreateAsset("Actor");
+        }
+        public ICommand DeleteActorCommand { get; }
+        private void DeleteActor(object obj)
+        {
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+                AppSingleton.Instance.ActorFactory.DeleteAsset((byte)obj);
+        }
+        public ICommand EditActorCommand { get; }
+        private void EditActor(object obj)
+        {
+            Texture texture = AppSingleton.Instance.ActorFactory.GetActorById((byte)obj).Texture;
+            TextureDrawerWindow textureDrawerWindow = new TextureDrawerWindow(texture);
+            textureDrawerWindow.ShowDialog();
+        }
+        public ICommand CopyActorCommand { get; }
+        private void CopyActor(object obj)
+        {
+            AppSingleton.Instance.ActorFactory.CopyAsset((byte)obj);
+        }
+        public Asset SelectedActor { get; set; }
+
         Map Map { get; set; }
-
+        private bool CanCmdExec(object obj) => true;
+        
         public MainWindowViewModel()
         {
             TileList = AppSingleton.Instance.TileFactory.GetObservableCollection();
@@ -64,6 +88,12 @@ namespace MapCreator
             DeleteTileCommand = new RelayCommand<object>(DeleteTile, CanCmdExec);
             EditTileCommand = new RelayCommand<object>(EditTile, CanCmdExec);
             CopyTileCommand = new RelayCommand<object>(CopyTile, CanCmdExec);
+
+
+            AddActorCommand = new RelayCommand<object>(AddActor, CanCmdExec);
+            DeleteActorCommand = new RelayCommand<object>(DeleteActor, CanCmdExec);
+            EditActorCommand = new RelayCommand<object>(EditActor, CanCmdExec);
+            CopyActorCommand = new RelayCommand<object>(CopyActor, CanCmdExec);
         }
     }
 }
