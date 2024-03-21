@@ -29,6 +29,10 @@
                     <CheckBox FontSize="100" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding DuplicateDisplay}"/>
                     <TextBlock FontSize="20" Grid.Column="1">Duplicate Displays</TextBlock>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Name="IsVisibleStackPanel">
+                    <CheckBox Name="IsCollision" FontSize="100" VerticalAlignment="Center" HorizontalAlignment="Left" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                    <TextBlock FontSize="20" Grid.Column="1">Is collision (Tiles only)</TextBlock>
+                </StackPanel>
             </StackPanel>
             <Button Grid.Row="1" Content="Save" Height="100" VerticalAlignment="Bottom" Command="{Binding SaveTextureCommand}">
                 

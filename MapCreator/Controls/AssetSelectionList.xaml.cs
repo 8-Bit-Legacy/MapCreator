@@ -63,5 +63,9 @@ namespace MapCreator.Controls
         {
             InitializeComponent();
         }
+
+        private void AddColisionBox()
+        {
+        }
     }
 }

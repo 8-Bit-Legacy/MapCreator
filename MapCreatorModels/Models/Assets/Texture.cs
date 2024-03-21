@@ -49,7 +49,7 @@ namespace MapCreatorModels.Models.Assets
         public Texture()
         {
             _color2DArray = new GameColor[Height, Width];
-            GameColor defaultColor = GameColorList.GetColorById(2);
+            GameColor defaultColor = GameColorList.GetColorById(0);
             FillWithColor(defaultColor);
         }
 

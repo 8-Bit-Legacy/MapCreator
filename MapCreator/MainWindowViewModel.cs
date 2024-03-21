@@ -29,12 +29,18 @@ namespace MapCreator
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             folderBrowserDialog.ShowDialog();
             string selectedPath = folderBrowserDialog.SelectedPath;
-
-            ExportData.ExportMap(AppSingleton.Instance.Map, selectedPath);
-            ExportData.ExportTiles(AppSingleton.Instance.TileFactory, selectedPath);
-            ExportData.ExportActors(AppSingleton.Instance.ActorFactory, selectedPath);
-            ExportData.ExportColors(selectedPath);
-            ExportData.ExportColisionMap(AppSingleton.Instance.Map, selectedPath);
+            try
+            {
+                ExportData.ExportMap(AppSingleton.Instance.Map, selectedPath);
+                ExportData.ExportTiles(AppSingleton.Instance.TileFactory, selectedPath);
+                ExportData.ExportActors(AppSingleton.Instance.ActorFactory, selectedPath);
+                ExportData.ExportColors(selectedPath);
+                ExportData.ExportColisionMap(AppSingleton.Instance.Map, selectedPath);
+            }
+            catch (Exception e)
+            {
+                System.Windows.MessageBox.Show("Un problème est survenu\r\n Vérifier que la map soit remplie de tuiles\r\n" + e.Message);
+            }
         }
 
 
@@ -53,8 +59,8 @@ namespace MapCreator
         public ICommand EditTileCommand { get; }
         private void EditTile(object obj)
         {
-            Texture texture = AppSingleton.Instance.TileFactory.GetTileById((byte)obj).Texture;
-            TextureDrawerWindow textureDrawerWindow = new TextureDrawerWindow(texture);
+            Asset asset = AppSingleton.Instance.TileFactory.GetTileById((byte)obj);
+            TextureDrawerWindow textureDrawerWindow = new TextureDrawerWindow(asset);
             textureDrawerWindow.ShowDialog();
         }
         public ICommand CopyTileCommand { get; }
@@ -81,8 +87,8 @@ namespace MapCreator
         public ICommand EditActorCommand { get; }
         private void EditActor(object obj)
         {
-            Texture texture = AppSingleton.Instance.ActorFactory.GetActorById((byte)obj).Texture;
-            TextureDrawerWindow textureDrawerWindow = new TextureDrawerWindow(texture);
+            Asset asset = AppSingleton.Instance.ActorFactory.GetActorById((byte)obj);
+            TextureDrawerWindow textureDrawerWindow = new TextureDrawerWindow(asset);
             textureDrawerWindow.ShowDialog();
         }
         public ICommand CopyActorCommand { get; }

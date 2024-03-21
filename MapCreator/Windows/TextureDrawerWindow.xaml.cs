@@ -10,17 +10,42 @@ namespace MapCreator.Windows
     {
         bool toggle;
         TextureDrawerViewModel textureDrawerViewModel;
-        public TextureDrawerWindow(Texture texture)
+        Asset window_asset;
+        public TextureDrawerWindow(Asset asset)
         {
             InitializeComponent();
-
-            textureDrawerViewModel = new TextureDrawerViewModel(texture);
+            if (asset is Tile)
+            {
+                IsCollision.IsChecked = ((Tile)asset).isCollision;
+            }
+            else
+            {
+                IsVisibleStackPanel.Visibility = Visibility.Collapsed;
+            }
+            window_asset = asset;
+            textureDrawerViewModel = new TextureDrawerViewModel(asset.Texture);
             this.DataContext = textureDrawerViewModel;
         }
 
         private void ThisWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             textureDrawerViewModel.DeleteCacheCommand.Execute(null);
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (window_asset is Tile)
+            {
+                ((Tile)window_asset).isCollision = true;
+            }
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (window_asset is Tile)
+            {
+                ((Tile)window_asset).isCollision = false;
+            }
         }
     }
 }
