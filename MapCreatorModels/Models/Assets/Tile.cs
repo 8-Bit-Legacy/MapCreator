@@ -5,7 +5,7 @@ namespace MapCreatorModels.Models.Assets
     public class Tile : Asset
     {
         [JsonInclude]
-        bool isCollision { get; set; } = false;
+        public bool isCollision { get; set; } = false;
         [JsonConstructor]
         private Tile() : base() { }
         internal Tile(byte id, string name) : base(id, name) { }

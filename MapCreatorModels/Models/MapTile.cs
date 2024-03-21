@@ -12,13 +12,10 @@ namespace MapCreatorModels.Models
     public class MapTile
     {
         [JsonIgnore]
-        public bool isFlippedHorizontally { get; set; } = false;
-        [JsonIgnore]
-        public bool isFlippedVertically { get; set; } = false;
-        [JsonIgnore]
         public Tile Tile { get; private set; }
 
         private byte _tileId;
+        // This is a workaround for the fact that the Tile property is read-only
         [JsonInclude]
         private byte Tid
         {

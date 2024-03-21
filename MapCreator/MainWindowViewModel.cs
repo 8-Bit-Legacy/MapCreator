@@ -14,12 +14,29 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Forms;
+using MapCreator.Export;
 
 namespace MapCreator
 {
     public class MainWindowViewModel
     {
         public ObservableCollection<Asset> TileList { get; set; }
+
+        public ICommand ExportCommand { get; }
+        private void Export(object obj)
+        {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            folderBrowserDialog.ShowDialog();
+            string selectedPath = folderBrowserDialog.SelectedPath;
+
+            ExportData.ExportMap(AppSingleton.Instance.Map, selectedPath);
+            ExportData.ExportTiles(AppSingleton.Instance.TileFactory, selectedPath);
+            ExportData.ExportActors(AppSingleton.Instance.ActorFactory, selectedPath);
+            ExportData.ExportColors(selectedPath);
+            ExportData.ExportColisionMap(AppSingleton.Instance.Map, selectedPath);
+        }
+
 
         public ICommand AddTileCommand { get; }
         private void AddTile(object obj)
@@ -94,6 +111,7 @@ namespace MapCreator
             DeleteActorCommand = new RelayCommand<object>(DeleteActor, CanCmdExec);
             EditActorCommand = new RelayCommand<object>(EditActor, CanCmdExec);
             CopyActorCommand = new RelayCommand<object>(CopyActor, CanCmdExec);
+            ExportCommand = new RelayCommand<object>(Export, CanCmdExec);
         }
     }
 }
