@@ -24,13 +24,18 @@ namespace MapCreator.Export
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < Map.Height; i++)
             {
+                sb.Append("(");
                 for (int j = 0; j < Map.Width; j++)
                 {
                     // Une tile est un asset
                     Asset asset = map.getMapTile(j, i).Tile;
-
-                    sb.Append(ByteToString(asset.Id, TILE_BIT_AMOUNT));
+                    sb.Append("x\"");
+                    sb.Append(asset.Id.ToString("x1"));
+                    sb.Append("\"");
+                    if (j != Map.Width - 1)
+                        sb.Append(",");
                 }
+                sb.Append("),");
                 sb.Append("\r\n");
             }
             string allo = sb.ToString();
@@ -73,7 +78,9 @@ namespace MapCreator.Export
             Asset[] assets = tileFactory.GetObservableCollection().ToArray();
             for (int i = 0; i < assets.Length; i++)
             {
+                sb.Append("(");
                 sb.Append(getTextureAsExport(assets[i].Texture));
+                sb.Append("),");
                 sb.Append("\r\n");
             }
             System.IO.File.WriteAllText(folderPath + "\\TileTextures.txt", sb.ToString());
@@ -106,16 +113,26 @@ namespace MapCreator.Export
 
         private static string getTextureAsExport(Texture texture)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < Texture.Height; i++)
             {
+                sb.Append("(");
                 for (int j = 0; j < Texture.Width; j++)
                 {
                     // 4 bits pour chaque couleur
-                    stringBuilder.Append(ByteToString(texture.GetColor(j, i).Id, 4));
+                    sb.Append("x\"");
+                    sb.Append(texture.GetColor(j, i).Id.ToString("x1"));
+                    sb.Append("\"");
+                    if (j != Texture.Width - 1)
+                    {
+                        sb.Append(",");
+                    }
                 }
+                sb.Append(")");
+                if (i != Texture.Height - 1)
+                    sb.Append(",");
             }
-            return stringBuilder.ToString();
+            return sb.ToString();
         }
     }
 }
