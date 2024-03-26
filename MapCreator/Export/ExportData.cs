@@ -24,19 +24,14 @@ namespace MapCreator.Export
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < Map.Height; i++)
             {
-                sb.Append("(");
                 for (int j = 0; j < Map.Width; j++)
                 {
                     // Une tile est un asset
                     Asset asset = map.getMapTile(j, i).Tile;
-                    sb.Append("x\"");
+                    
                     sb.Append(asset.Id.ToString("x1"));
-                    sb.Append("\"");
-                    if (j != Map.Width - 1)
-                        sb.Append(",");
+                    sb.Append(",\r\n");
                 }
-                sb.Append("),");
-                sb.Append("\r\n");
             }
             string allo = sb.ToString();
             System.IO.File.WriteAllText(folderPath + "\\Map.txt", allo);

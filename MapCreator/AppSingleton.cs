@@ -22,6 +22,8 @@ namespace MapCreator
         {
             TileFactory = Save.LoadTileFactory();
             TileFactory.InitializeList();
+            ActorFactory = Save.LoadActorFactory();
+            ActorFactory.InitializeList();
             Map = Save.LoadMap();
             Map.InitMap(TileFactory);
         }
@@ -30,6 +32,7 @@ namespace MapCreator
         {
             TileFactory.RearrangeList();
             Save.SaveTileFactory(TileFactory);
+            Save.SaveActorFactory(ActorFactory);
             Save.SaveMap(Map);
         }
 

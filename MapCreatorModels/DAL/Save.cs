@@ -8,6 +8,7 @@ namespace MapCreatorModels.DAL
     public static class Save
     {
         private const string tileFactoryFileName = "tileFactory.json";
+        private const string actorFactoryFileName = "actorFactory.json";
         private const string mapFileName = "map.json";
 
         public static void SaveTileFactory(TileFactory tileFactory)
@@ -24,6 +25,22 @@ namespace MapCreatorModels.DAL
                 return JsonSerializer.Deserialize<TileFactory>(json);
             }
             return new TileFactory();
+        }
+
+        public static void SaveActorFactory(ActorFactory actorFactory)
+        {
+            string json = JsonSerializer.Serialize(actorFactory);
+            System.IO.File.WriteAllText(actorFactoryFileName, json);
+        }
+
+        public static ActorFactory LoadActorFactory()
+        {
+            if (File.Exists(actorFactoryFileName))
+            {
+                string json = System.IO.File.ReadAllText(actorFactoryFileName);
+                return JsonSerializer.Deserialize<ActorFactory>(json);
+            }
+            return new ActorFactory();
         }
 
         public static void SaveMap(Map map)
