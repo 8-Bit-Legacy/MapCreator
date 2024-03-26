@@ -22,19 +22,28 @@ namespace MapCreator.Export
         public static void ExportMap(Map map, string folderPath)
         {
             StringBuilder sb = new StringBuilder();
+            sb.Append("; Sample initialization file for a\r\n; 4-bit wide by 4096 deep RAM\r\nmemory_initialization_radix = 16;\r\nmemory_initialization_vector = \r\n");
             for (int i = 0; i < Map.Height; i++)
             {
                 for (int j = 0; j < Map.Width; j++)
                 {
                     // Une tile est un asset
                     Asset asset = map.getMapTile(j, i).Tile;
-                    
+
                     sb.Append(asset.Id.ToString("x1"));
+                    if (j != Map.Width - 1)
+                    {
+                        sb.Append(",\r\n");
+                    }
+                }
+                if (i != Map.Height - 1)
+                {
                     sb.Append(",\r\n");
                 }
             }
+            sb.Append(';');
             string allo = sb.ToString();
-            System.IO.File.WriteAllText(folderPath + "\\Map.txt", allo);
+            System.IO.File.WriteAllText(folderPath + "\\Map.coe", allo);
         }
 
         public static string ExportColisionMap(Map map, string folderPath)
@@ -70,15 +79,18 @@ namespace MapCreator.Export
         public static void ExportTiles(TileFactory tileFactory, string folderPath)
         {
             StringBuilder sb = new StringBuilder();
+            sb.Append("; Sample initialization file for a\r\n; 4-bit wide by 4096 deep RAM\r\nmemory_initialization_radix = 16;\r\nmemory_initialization_vector = \r\n");
             Asset[] assets = tileFactory.GetObservableCollection().ToArray();
             for (int i = 0; i < assets.Length; i++)
             {
-                sb.Append("(");
                 sb.Append(getTextureAsExport(assets[i].Texture));
-                sb.Append("),");
-                sb.Append("\r\n");
+                if (i != assets.Length - 1)
+                {
+                    sb.Append(",");
+                }
             }
-            System.IO.File.WriteAllText(folderPath + "\\TileTextures.txt", sb.ToString());
+            sb.Append(";");
+            System.IO.File.WriteAllText(folderPath + "\\TileTextures.coe", sb.ToString());
         }
 
         public static void ExportColors(string folderPath)
@@ -111,21 +123,18 @@ namespace MapCreator.Export
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < Texture.Height; i++)
             {
-                sb.Append("(");
                 for (int j = 0; j < Texture.Width; j++)
                 {
-                    // 4 bits pour chaque couleur
-                    sb.Append("x\"");
                     sb.Append(texture.GetColor(j, i).Id.ToString("x1"));
-                    sb.Append("\"");
                     if (j != Texture.Width - 1)
                     {
                         sb.Append(",");
                     }
                 }
-                sb.Append(")");
                 if (i != Texture.Height - 1)
+                {
                     sb.Append(",");
+                }
             }
             return sb.ToString();
         }
