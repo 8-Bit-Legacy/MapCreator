@@ -9,7 +9,7 @@ namespace MapCreatorModels.Models.Assets
     public class GameColorList
     {
         private static readonly GameColor[] _Colors = [
-            new GameColor(0x000000, 0),
+            new GameColor(0xFFFFFF, 0),
             new GameColor(0x0000AA, 1),
             new GameColor(0x00AA00, 2),
             new GameColor(0x00AAAA, 3),
@@ -20,11 +20,11 @@ namespace MapCreatorModels.Models.Assets
             new GameColor(0x555555, 8),
             new GameColor(0x5555FF, 9),
             new GameColor(0x55FF55, 10),
-            new GameColor(0x55FFFF, 11),
+            new GameColor(0xfce0a8, 11),
             new GameColor(0xFF5555, 12),
-            new GameColor(0xFF55FF, 13),
+            new GameColor(0x000000, 13),
             new GameColor(0xFFFF55, 14),
-            new GameColor(0xFFFFFF, 15)
+            new GameColor(0x000000, 15)
         ];
 
         public static GameColor[] GetColors()
