@@ -33,12 +33,12 @@ namespace MapCreator.Export
                     sb.Append(asset.Id.ToString("x1"));
                     if (j != Map.Width - 1)
                     {
-                        sb.Append(",\r\n");
+                        sb.Append(",");
                     }
                 }
                 if (i != Map.Height - 1)
                 {
-                    sb.Append(",\r\n");
+                    sb.Append(",");
                 }
             }
             sb.Append(';');
@@ -67,18 +67,13 @@ namespace MapCreator.Export
         public static void ExportActors(ActorFactory actorFactory, string folderPath)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("; Sample initialization file for a\r\n; 4-bit wide by 4096 deep RAM\r\nmemory_initialization_radix = 16;\r\nmemory_initialization_vector = \r\n");
             Asset[] assets = actorFactory.GetObservableCollection().ToArray();
             for (int i = 0; i < assets.Length; i++)
             {
                 sb.Append(getTextureAsExport(assets[i].Texture));
-                if (i != assets.Length - 1)
-                {
-                    sb.Append(",");
-                }
+                sb.Append("\r\n");
             }
-            sb.Append(";");
-            System.IO.File.WriteAllText(folderPath + "\\ActorTextures.coe", sb.ToString());
+            System.IO.File.WriteAllText(folderPath + "\\ActorTextures.txt", sb.ToString());
         }
 
         public static void ExportTiles(TileFactory tileFactory, string folderPath)
@@ -106,7 +101,7 @@ namespace MapCreator.Export
             for (int i = 0; i < colors.Length; i++)
             {
                 sb.Append(colors[i].Id + " ");
-                sb.Append(colors[i].ColorValue.ToString("x6"));
+                sb.Append(colors[i].RBG.ToString("x6"));
                 sb.Append("\r\n");
             }
 

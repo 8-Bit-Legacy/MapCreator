@@ -19,6 +19,14 @@ namespace MapCreatorModels.Models.Assets
                 Blue = (byte)(value & 0xff);
             }
         }
+
+        public int RBG { get {
+                int temp = 0;
+                temp |= Red << 16;
+                temp |= Blue << 8;
+                temp |= Green;
+                return temp;
+            } }
         private byte _red;
         public byte Red
         {
