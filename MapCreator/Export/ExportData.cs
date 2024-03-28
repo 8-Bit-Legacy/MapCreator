@@ -68,12 +68,17 @@ namespace MapCreator.Export
         {
             StringBuilder sb = new StringBuilder();
             Asset[] assets = actorFactory.GetObservableCollection().ToArray();
+            sb.Append("; Sample initialization file for a\r\n; 4-bit wide by 4096 deep RAM\r\nmemory_initialization_radix = 16;\r\nmemory_initialization_vector = \r\n");
             for (int i = 0; i < assets.Length; i++)
             {
                 sb.Append(getTextureAsExport(assets[i].Texture));
-                sb.Append("\r\n");
+                if (i != assets.Length - 1)
+                {
+                    sb.Append(",");
+                }
+                sb.Append(";");
             }
-            System.IO.File.WriteAllText(folderPath + "\\ActorTextures.txt", sb.ToString());
+            System.IO.File.WriteAllText(folderPath + "\\ActorTextures.coe", sb.ToString());
         }
 
         public static void ExportTiles(TileFactory tileFactory, string folderPath)
