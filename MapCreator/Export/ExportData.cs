@@ -75,9 +75,9 @@ namespace MapCreator.Export
                 if (i != assets.Length - 1)
                 {
                     sb.Append(",");
-                }
-                sb.Append(";");
+                }   
             }
+            sb.Append(";");
             System.IO.File.WriteAllText(folderPath + "\\ActorTextures.coe", sb.ToString());
         }
 
