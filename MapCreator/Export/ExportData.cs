@@ -29,8 +29,8 @@ namespace MapCreator.Export
                 {
                     // Une tile est un asset
                     Asset asset = map.getMapTile(j, i).Tile;
-
-                    sb.Append(asset.Id.ToString("x1"));
+                    // On est sur du 6 bits donc minimum 2 characteres
+                    sb.Append(asset.Id.ToString("x2"));
                     if (j != Map.Width - 1)
                     {
                         sb.Append(",");
